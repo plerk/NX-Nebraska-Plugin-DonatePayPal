@@ -1,0 +1,9 @@
+
+perl ./script/nx_nebraska_create \
+	model \
+	DB \
+	DBIC::Schema NX::Nebraska::Schema \
+	create=static \
+	'dbi:mysql:database=nebraska;host=mysql' \
+	nebraska \
+	nebraska

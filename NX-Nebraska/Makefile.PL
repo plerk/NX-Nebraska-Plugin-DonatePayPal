@@ -1,0 +1,44 @@
+#!/usr/bin/env perl
+# IMPORTANT: if you delete this file your app will not work as
+# expected.  You have been warned.
+use inc::Module::Install;
+use Module::Install::Catalyst; # Complain loudly if you don't have
+                               # Catalyst::Devel installed or haven't said
+                               # 'make dist' to create a standalone tarball.
+
+name 'NX-Nebraska';
+version_from 'lib/NX/Nebraska.pm';
+license 'bsd';
+author 'Project Nebraska Team <nx.nebraska@gmail.com>';
+perl_version '5.010';
+abstract 'Project Nebraska Website';
+
+# Originally Catalyst generated this file 
+# requiring the latest version on Debian
+# squeeze 5.80025, where it was generated
+# but I wanted to be able to run this on 
+# Ubuntu 10.04 which only had 5.80022.
+# Presumably 5.80022 is good enough?
+requires 'Catalyst::Runtime' => '5.80022';
+requires 'Catalyst::Plugin::ConfigLoader';
+requires 'Catalyst::Plugin::Static::Simple';
+requires 'Catalyst::Plugin::Unicode::Encoding' => 1.1;
+requires 'Catalyst::Action::RenderView';
+requires 'Cache::Memcached::Fast';
+requires 'JSON::XS';
+requires 'File::HomeDir';
+requires 'Text::CSV_XS';
+requires 'SQL::Translator';
+requires 'DBD::mysql';
+requires 'DBD::SQLite';
+requires 'Moose';
+requires 'NX::Ziyal' => '0.03';
+requires 'namespace::autoclean';
+requires 'Config::General'; # This should reflect the config file format you've chosen
+                 # See Catalyst::Plugin::ConfigLoader for supported formats
+test_requires 'Test::More' => '0.88';
+#catalyst;
+
+install_script glob('script/*');
+auto_install;
+WriteAll;

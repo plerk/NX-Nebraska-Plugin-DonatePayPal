@@ -1,0 +1,13 @@
+\title{Download}
+
+\p{For the source code to the Project Nebraska website and tools, please
+checkout the Nebraska Project subversion repository:}
+
+\ul{
+  \li{[[http://nebraska.wdlabs.com/svn]]}
+}
+
+\p{Most of the source code is licensed under a BSD like license.}
+
+\p{The Project Nebraska Team is working on Debian, Redhat and Windows binary
+packages.}

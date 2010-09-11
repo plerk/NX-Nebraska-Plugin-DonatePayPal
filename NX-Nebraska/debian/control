@@ -1,0 +1,26 @@
+Source: libnx-nebraska-perl
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 7)
+Build-Depends-Indep: perl (>= 5.10.1), libnamespace-autoclean-perl,
+  libcatalyst-modules-perl, libjson-xs-perl,
+  libcatalyst-plugin-unicode-encoding-perl (>= 1.1),
+  libconfig-general-perl, libdbd-mysql-perl,
+  libcache-memcached-fast-perl, libcatalyst-perl (>= 5.80022),
+  libmoose-perl, sqlite3, libtext-csv-xs-perl, libfile-homedir-perl
+Maintainer: Graham THE Ollis <ollisg@>
+Standards-Version: 3.8.3
+Homepage: http://search.cpan.org/dist/NX-Nebraska/
+
+Package: libnx-nebraska-perl
+Architecture: all
+Depends: ${perl:Depends}, ${misc:Depends}, libnamespace-autoclean-perl,
+  libcatalyst-modules-perl, libjson-xs-perl,
+  libcatalyst-plugin-unicode-encoding-perl (>= 1.1),
+  libconfig-general-perl, libdbd-mysql-perl,
+  libcache-memcached-fast-perl, libcatalyst-perl (>= 5.80022),
+  libmoose-perl, sqlite3, libtext-csv-xs-perl, libfile-homedir-perl
+Description: NX::Nebraska::Schema::Result::IntegerStatistic
+ NX::Nebraska::Schema::Result::IntegerStatistic
+ .
+ This description was automagically extracted from the module by dh-make-perl.

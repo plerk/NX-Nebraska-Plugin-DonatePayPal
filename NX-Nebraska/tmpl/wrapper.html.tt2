@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>[% IF title %][% title %] - [% END %]Project Nebraska</title>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/news/rss" />
+
+    [% IF js.0 %]
+      <!--[if lte IE 8]>
+        <script src="/svgweb/svg.js" data-path="/svgweb/"></script>
+        <script type="text/ecmascript" language="JavaScript">
+          var NX = {};
+          NX.Nebraska = {};
+          NX.Nebraska.Util = {};
+          NX.Nebraska.Util.using_svgweb_hack = true;
+        </script>
+      <![endif]-->
+    [% END %]
+    [% FOREACH script IN js %]
+      <script src="[% script | html %]" type="text/ecmascript" language="JavaScript"></script>
+    [% END %]
+    <style type="text/css" media="all">
+      @import url("/css/main.css");
+    </style>
+  </head>
+  
+  <body>
+    <h1>[% title or "Project Nebraska" %]</h1>
+    
+    <div id="main_icon_container"><center><div id="main_icon"><a href="/"><img src="/png/icon.png" /></a></div><center></div>
+    
+    <div class="container">
+    
+    [% IF navs %]
+      <center> [% # !! FIXME !! how do I do this without a <center> ?? %]
+        <div id="main_navigation">
+          <ul class="nav_list">
+            [% FOREACH nav IN navs %]
+              <li><a href="[% nav.0 | html %]">[% nav.1 | html %]</a></li>
+            [% END %]
+          </ul>
+        </div>
+      </center>
+    [% END %]
+    
+    <div id="main_content">
+      [% content %]
+    </div>
+    
+    </div>
+    
+    <h6>&copy 2010 Project Nebraska Team</h6>
+    
+  </body>
+</html>

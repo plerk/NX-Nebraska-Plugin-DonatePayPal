@@ -1,0 +1,89 @@
+\title{About}
+
+\p{The purpose of Project Nebraska is to create small map
+applications for the amusement of developer and user alike.
+The intention is to release as much of the website source
+code under a permissive OpenSource license as soon as possible.
+See the [[doc/download][Download]] page for details.  For 
+questions and comments try the [[doc/contact][Contact]] page.}
+
+\h2{Compare Maps}
+
+\p{The first application [[compare][Compare]] displays two maps, an 
+\em{input} and an \em{output} map.  
+
+Given a statistic, such as population or area,
+
+the user selects regions in
+the \em{input} map (usually states, provinces, territories or 
+countries), giving the input map a certain \em{weight} (the
+sum of the value of the statistic for each region).
+
+The application then attempts to find an equivalent region
+in the \em{output} map that has a similar \em{weight}.
+
+There are various algorithms which may be tried:}
+
+
+\ol{
+
+  \li{\p{\strong{smallest first} - adds each state starting
+  with the smallest first so long as it does not exceed
+  the weight of the input map.}}
+  
+  \li{\p{\strong{largest first} - adds each state starting
+  with the largest so long as it does not exceed the
+  the weight of the input map.}}
+  
+  \li{\p{\strong{optimal} - tries every combination for the
+  closest fit.  Because this algorithm is <!-- O(n\sup{2}) --> very slow, we 
+  only attempt this algorithm when the output map has a 
+  very small number of regions to try.}}
+}
+
+\p{The weight of each is displayed under each map.  The
+weight of the output map is colored depending on how 
+close it got the application got to the target weight.}
+
+\ol{
+  \li{\p{\<span style="color: green">{green} is excellent, within 5% of the target.}}
+  \li{\p{\<span style="color: yellow">{yellow} is decent, within 10% of the target.}}
+  \li{\p{\<span style="color: orange">{orange} is not very good, within 20% of the target.}}
+  \li{\p{\<span style="color: red">{red} is bad, the distance from the optimal weight is more than 20%.}}
+}
+
+\p{If you move your mouse over the target map's weight you 
+can see the exact distance from the target, and the percent 
+of the input map's weight that it is off by.  If you mouse
+over the regions in either map you will see the name of
+the region, and the value of the statistic for that region.}
+
+\h2{Browser Compatibility}
+
+\p{Short version: use the latest stable version of [[http://www.mozilla.com][Firefox]] 
+if possible.  Other modern browsers will probably work, but may not have been tested
+as thoroughly.}
+
+\p{Project Nebraska makes extensive use of [[wpen:SVG][Scalable Vector Graphic (SVG) format]]
+and [[wpen:JavaScript]].  JavaScript is well supported in every major modern browser, and
+SVG is well supported in every major modern bowser except for Internet Explorer (IE).  As of this
+writing it is expected that version 9 of IE will support SVG.  Unforunately, although support 
+is good in most browsers, they each have their own idiosyncrasies.  Although the Project Nebraska 
+team has endeavored to make the all of the code as browser portable as possible, and has done 
+some testing on other major browsers, most development has been done using Firefox 3.6.  For
+Internet Explorer 8 (IE8) and earlier versions, Project Nebraska makes use of 
+[[http://code.google.com/p/svgweb/][svgweb]], an implementation of SVG using JavaScript and
+Flash.  When Internet Explorer 9 (IE9) comes out we will hopefully be able to add support for
+it.}
+
+\h2{Help!}
+
+\p{If you want to help there are number of things that you can do:}
+
+\ul{
+  \li{Help out in the development of JavaScript in non Firefox browsers.}
+  \li{Create attractive graphics for the project, which at the moment are pretty basic.}
+  \li{Anything else that you can think of...}
+}
+
+\p{If you think you can help out, please use the [[doc/contact][Contact]] page.}
