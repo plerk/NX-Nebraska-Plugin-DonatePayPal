@@ -1,0 +1,22 @@
+debian/changelog
+debian/compat
+debian/control
+debian/copyright
+debian/libnx-nebraska-plugin-donatepaypal-perl.install
+debian/rules
+debian/watch
+inc/Module/Install.pm
+inc/Module/Install/Base.pm
+inc/Module/Install/Can.pm
+inc/Module/Install/Fetch.pm
+inc/Module/Install/Makefile.pm
+inc/Module/Install/Metadata.pm
+inc/Module/Install/Win32.pm
+inc/Module/Install/WriteAll.pm
+lib/NX/Nebraska/Plugin/DonatePayPal.pm
+Makefile.PL
+MANIFEST			This list of files
+META.yml
+ziyal/doc/donate.zl
+ziyal/doc/thanks.zl
+LICENSE

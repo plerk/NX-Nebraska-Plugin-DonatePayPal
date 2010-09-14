@@ -1,0 +1,2 @@
+version=3
+http://search.cpan.org/dist/NX-Nebraska-Plugin-DonatePayPal/   .*/NX-Nebraska-Plugin-DonatePayPal-v?(\d[\d.-]+)\.(?:tar(?:\.gz|\.bz2)?|tgz|zip)$

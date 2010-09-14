@@ -1,0 +1,16 @@
+Source: libnx-nebraska-plugin-donatepaypal-perl
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 7)
+Build-Depends-Indep: perl (>= 5.10.0)
+Maintainer: ollisg <ollisg@rumble.zigzag.wdlabs.com>
+Standards-Version: 3.9.1
+Homepage: http://search.cpan.org/dist/NX-Nebraska-Plugin-DonatePayPal/
+
+Package: libnx-nebraska-plugin-donatepaypal-perl
+Architecture: all
+Depends: ${misc:Depends}, ${perl:Depends}, perl (>= 5.10.0)
+Description: Provide a donate via PayPal button Project Nebraska website
+ (no description was found)
+ .
+ This description was automagically extracted from the module by dh-make-perl.
