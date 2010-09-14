@@ -10,6 +10,9 @@ use feature qw( :5.10 );
 use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 
+our $VERSION = '0.05';
+$VERSION = eval $VERSION;
+
 # Set flags and add plugins for the application
 #
 #   ConfigLoader: will load the configuration from a Config::General file in the
@@ -34,7 +37,7 @@ do {
   
   my $found = 0;
   
-  for my $try ("$mod_location/nebraska.yml", "$mod_location/../nebraska.yml", '/etc/nebraska.yml')
+  for my $try ("$mod_location/nebraska.yml", "$mod_location/../nebraska.yml", "$mod_location/../../nebraska.yml", '/etc/nebraska.yml')
   {
     if(-r $try)
     {
@@ -58,10 +61,79 @@ do {
       last;
     }
   }
+
 };
 
-our $VERSION = '0.04';
-$VERSION = eval $VERSION;
+# Provider objects for ads and donate buttons.
+# We're going to use AdSense and PayPal for
+# the main site, but the idea is that you could
+# plugin in your own providers if they don't 
+# suit.
+# IF they are not defined then the website should
+# simply be blank in those locations.
+sub ad 
+{
+  state $provider;
+
+  return $provider->[0] if defined $provider;
+  
+  if(defined __PACKAGE__->config->{Ad})
+  {
+    my %ad = %{ __PACKAGE__->config->{Ad} };
+    my $classname = delete $ad{classname};
+    eval "use $classname";
+    die $@ if $@;
+    warn "using ad provider: $classname\n" if 1;
+    my $ap = $classname->new(%ad);
+    $provider = [ $ap ];
+    return $ap;
+  }
+  else
+  {
+    $provider = [ undef ];
+    return undef;
+  }
+}
+
+sub donate 
+{
+  state $provider;
+  
+  return $provider->[0] if defined $provider;
+  
+  if(defined __PACKAGE__->config->{Donate})
+  {
+    my %donate = %{ __PACKAGE__->config->{Donate} };
+    my $classname = delete $donate{classname};
+    eval "use $classname";
+    die $@ if $@;
+    warn "using donate provider: $classname\n" if 1;
+    my $dp = $classname->new(%donate);
+    $provider = [ $dp ];
+    return $dp;
+  }
+  else
+  {
+    $provider = [ undef ];
+    return undef;
+  }
+}
+
+sub nav
+{
+  my $class = shift;
+  state $menu = [
+    [ '/compare'      => 'Compare'  ],
+    [ '/doc/about'    => 'About'    ],
+    [ '/news'         => 'News'     ],
+    [ '/doc/contact'  => 'Contact'  ],
+    [ '/doc/download' => 'Download' ],
+  ];
+
+  push @$menu, $_ for @_;
+  
+  return $menu;
+}
 
 # Get an instance of an object with a 
 # Cache::Memcached compatible interface 
@@ -76,6 +148,12 @@ sub memd
   return $memd = new Cache::Memcached::Fast({
     servers => [ { address => '127.0.0.1:11211' } ],
   });
+}
+
+sub ziyal_var
+{
+  state %hash;
+  return \%hash;
 }
 
 # Ziyal is an alternative document syntax used for
@@ -109,7 +187,7 @@ sub ziyal
   my $zl = do { local $/; <IN> };
   close IN;
   
-  my $doc = NX::Ziyal::ziyal2html($zl, default => $class->uri_for('/'));
+  my $doc = NX::Ziyal::ziyal2html($zl, default => $class->uri_for('/'), var => $class->ziyal_var);
   
   my @result = (
     html => $doc->html,

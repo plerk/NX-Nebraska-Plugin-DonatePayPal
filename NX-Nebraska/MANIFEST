@@ -32,6 +32,8 @@ lib/NX/Nebraska/View/TT.pm
 lib/NX/Nebraska/View/TT/HTML.pm
 lib/NX/Nebraska/View/TT/XML.pm
 lib/NX/Nebraska/Import/Source/USACensus.pm
+lib/NX/Nebraska/Import/Source/StatisticsCanada.pm
+lib/NX/Nebraska/Import/Source/INEGI.pm
 lib/NX/Nebraska/Import/Stat/Population.pm
 lib/NX/Nebraska/Import/Stat/Population/FemaleCensus.pm
 lib/NX/Nebraska/Import/Stat/Population/Estimate.pm
@@ -158,6 +160,7 @@ script/nx_nebraska_server
 script/nx_nebraska_test
 script/nx_nebraska_deploy
 script/nx_nebraska_import
+bin/create_sqlite.pl
 bin/refresh_model
 sql/mysql/000_perm.sql
 sql/mysql/010_places.sql
@@ -177,6 +180,7 @@ TODO
 ziyal/404.zl
 ziyal/500.zl
 ziyal/doc/about.zl
+ziyal/doc/about_compare.zl
 ziyal/doc/contact.zl
 ziyal/doc/download.zl
 ziyal/news/.zl

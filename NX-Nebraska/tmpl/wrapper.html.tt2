@@ -32,7 +32,7 @@
     <div id="main_icon_container"><center><div id="main_icon"><a href="/"><img src="/png/icon.png" /></a></div><center></div>
     
     <div class="container">
-    
+
     [% IF navs %]
       <center> [% # !! FIXME !! how do I do this without a <center> ?? %]
         <div id="main_navigation">

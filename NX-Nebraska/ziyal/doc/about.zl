@@ -7,9 +7,10 @@ code under a permissive OpenSource license as soon as possible.
 See the [[doc/download][Download]] page for details.  For 
 questions and comments try the [[doc/contact][Contact]] page.}
 
+\<a name="compare_details">
 \h2{Compare Maps}
 
-\p{The first application [[compare][Compare]] displays two maps, an 
+\p{The first application [[compare][Compare Maps]] displays two maps, an 
 \em{input} and an \em{output} map.  
 
 Given a statistic, such as population or area,
@@ -17,10 +18,10 @@ Given a statistic, such as population or area,
 the user selects regions in
 the \em{input} map (usually states, provinces, territories or 
 countries), giving the input map a certain \em{weight} (the
-sum of the value of the statistic for each region).
+sum of the values of the statistic for each region).
 
-The application then attempts to find an equivalent region
-in the \em{output} map that has a similar \em{weight}.
+The application then attempts to find an equivalent set of regions
+in the \em{output} map that has approximately the same \em{weight}.
 
 There are various algorithms which may be tried:}
 
@@ -67,7 +68,7 @@ as thoroughly.}
 \p{Project Nebraska makes extensive use of [[wpen:SVG][Scalable Vector Graphic (SVG) format]]
 and [[wpen:JavaScript]].  JavaScript is well supported in every major modern browser, and
 SVG is well supported in every major modern bowser except for Internet Explorer (IE).  As of this
-writing it is expected that version 9 of IE will support SVG.  Unforunately, although support 
+writing it is expected that version 9 of IE will support SVG.  Unfortunately, although support 
 is good in most browsers, they each have their own idiosyncrasies.  Although the Project Nebraska 
 team has endeavored to make the all of the code as browser portable as possible, and has done 
 some testing on other major browsers, most development has been done using Firefox 3.6.  For

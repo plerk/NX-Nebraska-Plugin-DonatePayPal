@@ -1,7 +1,9 @@
-
-<h2>Compare Maps</h2>
-
-<br/>
+<div class="ziyal_content">
+  [% IF about_summary %]
+  <h2>[% about_summary.title | html %]</h2>
+  [% about_summary.html %]
+  [% END %]
+</div>
 
 <table id="compare_table">
   <tr>
@@ -83,14 +85,16 @@
   </tr>
 </table>
 
+[% IF ad %]<center>[% ad.ad_wide %]</center>[% END %]
+
 <table>
   <tr>
     <td width="49%" valign="top">
     
       <div class="summary">
-        [% IF extra %]
-          <h2>[% extra.title | html %]</h2>
-          [% extra.html %]
+        [% IF about_detail %]
+          <h2>[% about_detail.title | html %]</h2>
+          [% about_detail.html %]
         [% END %]
       </div>
      
@@ -107,6 +111,7 @@
           [% news_item.html %]
           <p><a href="/news">more news</a> | <a href="/news/item/[% news_item.id | html %]/view">link</a></p>
         [% END %]
+        [% IF ad %]<center>[% ad.ad_rectangle %]</center>[% END %]
       </div>
       
     </td>

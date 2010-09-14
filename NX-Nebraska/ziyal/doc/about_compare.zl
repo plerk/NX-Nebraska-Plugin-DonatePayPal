@@ -1,0 +1,12 @@
+\title{Compare Maps}
+
+\p{This application displays two maps, an \em{input} and an \em{output} 
+map.  Given a statistic, such as population or area,
+the user selects regions in
+the \em{input} map (usually states, provinces, territories or 
+countries), giving the input map a certain \em{weight} (the
+sum of the values of the statistic for each region).
+The application then attempts to find an equivalent set of regions
+in the \em{output} map that has approximately the same \em{weight}.
+\<a href="#compare_details">{More details on how it works can be seen below}.
+}

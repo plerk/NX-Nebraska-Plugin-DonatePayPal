@@ -14,18 +14,45 @@ sub index :Path :Args(0) {
   my $c = shift;
   
   my($news_item) = $c->get_news(limit => 1);
-  my %extra = $c->ziyal('doc', 'about');
-  delete $extra{template};
-
+  my %about_summary = $c->ziyal('doc', 'about_compare');
+  my %about_detail = $c->ziyal('doc', 'about');
+  
+  my @maps = grep { $_->id ne 'top' } $c->model('DB::MapWithValues')->all;
+  
+  my $input_map_code = $c->req->param('input_map_code');
+  my $output_map_code = $c->req->param('output_map_code');
+  
+  my @rand_maps = map { $_->id } @maps;
+  
+  unless(defined $input_map_code)
+  {
+    my $size = int @rand_maps;
+    my $i = int rand $size;
+    $input_map_code = splice @rand_maps, $i, 1;
+    use YAML ();
+    #warn YAML::Dump({size => $size, i => $i, input_map_code => $input_map_code});
+  }
+  unless(defined $output_map_code)
+  {
+    my $size = int @rand_maps;
+    my $i = int rand $size;
+    $output_map_code = splice @rand_maps, $i, 1;
+    use YAML ();
+    #warn YAML::Dump({size => $size, i => $i, output_map_code => $output_map_code});
+  }
+  
+  die "bad input map" unless $input_map_code =~ /^[a-z][a-z]1$/;
+  die "bad output map" unless $output_map_code =~ /^[a-z][a-z]1$/;
+  
   $c->stash(
     news_item => $news_item,
     maps => [ 
       { 
-        default => ( $c->req->param('input_map_code') // 'us1'), 
+        default => $input_map_code, 
         id => 'input', name => 'Input', 
       }, 
       { 
-        default => ( $c->req->param('output_map_code') // 'au1'), 
+        default => $output_map_code, 
         id => 'output', name => 'Output' 
       } 
     ],
@@ -46,9 +73,10 @@ sub index :Path :Args(0) {
       Algo/LargestFirst 
       Algo/Optimal 
     ) ],
-    available_maps => [ $c->model('DB::MapWithValues')->all ],
+    available_maps => \@maps,
     template => 'compare/index.tt2',
-    extra => \%extra,
+    about_detail => \%about_detail,
+    about_summary => \%about_summary,
   );
 }
 

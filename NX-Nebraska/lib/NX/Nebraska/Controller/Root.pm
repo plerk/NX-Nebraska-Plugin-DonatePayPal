@@ -63,15 +63,15 @@ sub begin :Private
   my $self = shift;
   my $c = shift;
   
+  my $ad = $c->ad;
+  my $donate = $c->donate;
+  my $nav = $c->nav; 
+ 
   $c->stash(
     js => [],
-    navs => [
-      [ '/compare'      => 'Compare'  ],
-      [ '/doc/about'    => 'About'    ],
-      [ '/news'         => 'News'     ],
-      [ '/doc/contact'  => 'Contact'  ],
-      [ '/doc/download' => 'Download' ],
-    ],
+    navs => $nav,
+    ad => $ad,
+    donate => $donate,
   );
 }
 

@@ -106,6 +106,13 @@ sub view :Chained('object') :PathPart('view') :Args(0)
   );
 }
 
+# subs edit and add were used as scafolding early on
+# but we don't want people to be able to edit the database
+# remotely for now.  So we'll just pod cut comment them out
+# for now.
+
+=pod
+
 sub edit :Chained('object') :PathPart('edit') :Args(0)
 {
   my $self = shift;
@@ -157,6 +164,8 @@ sub add :Chained('object') :PathPart('add') :Args(0)
     template => 'map/add.tt2',
   );
 }
+
+=cut
 
 sub object :Chained('base') :PathPart('id') :CaptureArgs(1)
 {

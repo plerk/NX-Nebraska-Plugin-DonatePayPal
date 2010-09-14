@@ -1,1 +1,4 @@
-<div class="ziyal_content">[% html %]</div>
+<div class="ziyal_content">
+  [% html %]
+  [% IF ad %]<center>[% ad.ad_wide %]</center>[% END %]
+</div>
