@@ -23,9 +23,11 @@ requires 'Catalyst::Runtime' => '5.80022';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Plugin::Unicode::Encoding' => 1.1;
+requires 'Catalyst::Plugin::StackTrace';
+requires 'Catalyst::View::TT';
+requires 'Catalyst::View::JSON';
 requires 'Catalyst::Action::RenderView';
-requires 'Cache::Memcached::Fast';
-requires 'JSON::XS';
+requires 'Catalyst::Model::DBIC::Schema';
 requires 'File::HomeDir';
 requires 'Text::CSV_XS';
 requires 'SQL::Translator';
@@ -39,6 +41,23 @@ requires 'Config::General'; # This should reflect the config file format you've 
 test_requires 'Test::More' => '0.88';
 #catalyst;
 
-install_script glob('script/*');
+feature 'Cacheing using Cache::Memcached::Fast (recommended)',
+  -default => 1,
+  'Cache::Memcached::Fast' => 0;
+
+eval "use Cache::Memcached::Fast";
+if($@)
+{
+
+  feature 'Cacheing using Cache::Memcached (only used in the absence of Cache::Memcached::Fast)',
+    -default => 0,
+    'Cache::Memcached' => 0;
+
+  feature 'Cacheing using Cache::Memcached::Mock (only used in the absence of Cache::Memcached and ::Fast)',
+    -default => 0,
+    'Cache::Memcached::Mock' => 0;
+}
+
+install_script glob('script/nx_nebraska_{cgi,fastcgi,import,server}');
 auto_install;
 WriteAll;

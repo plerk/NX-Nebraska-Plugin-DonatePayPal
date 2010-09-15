@@ -29,7 +29,7 @@ sub index :Path :Args(0) {
     my $size = int @rand_maps;
     my $i = int rand $size;
     $input_map_code = splice @rand_maps, $i, 1;
-    use YAML ();
+    #use YAML ();
     #warn YAML::Dump({size => $size, i => $i, input_map_code => $input_map_code});
   }
   unless(defined $output_map_code)
@@ -37,7 +37,7 @@ sub index :Path :Args(0) {
     my $size = int @rand_maps;
     my $i = int rand $size;
     $output_map_code = splice @rand_maps, $i, 1;
-    use YAML ();
+    #use YAML ();
     #warn YAML::Dump({size => $size, i => $i, output_map_code => $output_map_code});
   }
   

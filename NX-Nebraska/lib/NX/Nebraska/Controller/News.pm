@@ -1,6 +1,7 @@
 package NX::Nebraska::Controller::News;
 
 use Moose;
+use NX::Nebraska::NewsItem;
 use feature qw( :5.10 );
 use namespace::autoclean;
 
@@ -48,7 +49,7 @@ sub rss :Chained('base') :PathPart('rss') :Args(0)
     title => 'Project Nebraska',
     base_url => $base_url,
     description => 'Updates and news from Project Nebraska',
-    last_build_date => $c->rss_timestamp(time),
+    last_build_date => NX::Nebraska::NewsItem->timerss(time),
     generator => 'NX::Nebraska',
     news_items => [$c->get_news],
     template => 'news/rss.tt2',

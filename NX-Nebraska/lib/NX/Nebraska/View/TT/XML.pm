@@ -6,7 +6,7 @@ use warnings;
 use base 'NX::Nebraska::View::TT';
 
 __PACKAGE__->config(
-    WRAPPER => 'wrapper.xml.tt2',
+  WRAPPER => 'wrapper.xml.tt2',
 );
 
 1;

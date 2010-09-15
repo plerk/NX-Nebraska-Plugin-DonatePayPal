@@ -81,11 +81,19 @@ sub end : ActionClass('RenderView')
   my $self = shift;
   my $c = shift;
   
+  #$c->response->headers->header(
+  #  'Last-Modified' => localtime(time),
+  #);
+  
   return if $c->debug;
   
   my $errors = scalar @{ $c->error };
   if($errors)
   {
+    # maybe dump some debugging information
+    # or email the data so that we can 
+    # debug issues from the production
+    # website.
     $c->res->status(500);
     $c->stash($c->ziyal(500));
     $c->clear_errors;

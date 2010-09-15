@@ -1,16 +1,15 @@
 package NX::Nebraska;
 
 use Moose;
-use POSIX ();
 use Cwd ();
-use JSON::XS ();
 use NX::Ziyal ();
 use NX::Nebraska::NewsItem;
+use NX::Nebraska::Cache;
 use feature qw( :5.10 );
 use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 $VERSION = eval $VERSION;
 
 # Set flags and add plugins for the application
@@ -137,15 +136,20 @@ sub nav
 
 # Get an instance of an object with a 
 # Cache::Memcached compatible interface 
-# to a memcached server.  At the moment 
-# I'm using ::Fast
+# to a memcached server.  NX::Nebraska::Cache
+# will find the best available option,
+# or fall back on a simple in-core
+# memory cache (using a Perl hash) that
+# only provides get() and set() 
+# (so don't use any other functions without
+# implementing them in NX::Nebraska::Cache)
 sub memd
 {
   my $class = shift;
   state $memd;
   return $memd if defined $memd;
-  require Cache::Memcached::Fast;
-  return $memd = new Cache::Memcached::Fast({
+  
+  return $memd = NX::Nebraska::Cache->get_cache_object({
     servers => [ { address => '127.0.0.1:11211' } ],
   });
 }
@@ -198,14 +202,6 @@ sub ziyal
   $class->memd->set($cache_key => \@result, 60*60);
   
   return @result;
-}
-
-# Generate a timestamp in the format expected by RSS
-sub rss_timestamp
-{
-  my $class = shift;
-  my $time = shift;
-  return POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime $time)
 }
 
 # Get a list of news items (blog entries).  At the moment these are
@@ -274,44 +270,6 @@ sub get_news
   }
 }
 
-# return a json document to the web browser.  This is 
-# usually for a AJAX call.
-sub json
-{
-  my $self = shift;
-  my $object = shift;
-  state $encoder;
-  
-  unless(defined $encoder)
-  {
-    # confusingly, what we want to do is set the UTF8 flag
-    # on the encoder to zero / false.  This tells the encoder 
-    # not to encode the UTF8 strings (flaged by Perl mind 
-    # you as UTF8) that are coming from MySQL into UTF8 as
-    # though they were something other than UTF8 even though
-    # they are CLEARLY taged by Perl as UTF8.  Yay.
-    $encoder = JSON::XS->new->utf8(0);
-  }
-  
-  my $json = $encoder->encode($object);
-  # use bytes forces length to return the length
-  # of the json string in bytes instead of 
-  # characters, which in Unicode are not the
-  # same thing!
-  use bytes;
-  $self->response->content_length(length $json);
-  $self->response->body($json);
-  
-  # FOR NOW
-  # we are using text/html for the JSON content type,
-  # although IT IS WRONG because the Catalyst Unicode
-  # plugin only works with certain content-types,
-  # including text/html.
-  
-  #$self->response->content_type('application/json');
-  $self->response->content_type('text/html');
-}
-
 # Configure the application.
 #
 # Note that settings in nx_nebraska.conf (or other external
@@ -329,9 +287,9 @@ __PACKAGE__->config(
   default_view => 'TT::HTML',
   static => {
     mime_types => {
-	  # These are needed by Google's svgweb
-	  # that we use for IE8 which does not 
-	  # have native SVG support.
+      # These are needed by Google's svgweb
+      # that we use for IE8 which does not 
+      # have native SVG support.
       swf => 'application/x-shockwave-flash',
       htc => 'text/x-component',
       svg => 'image/svg+xml',

@@ -74,11 +74,22 @@ sub filename { shift->{filename} }
 sub id { shift->{id} }
 sub is_cached { shift->{is_cached} }
 
+# Windows is lame.
+my $human_strftime_format = $^O eq 'MSWin32' ? '%d %B %Y %I:%M%p' : '%e %B %Y %I:%M%p';
+
 # Generate a timestamp as easily consumable by a human being.
 sub timestr
 {
   my $self = shift;
-  return lc POSIX::strftime("%e %B %Y %I:%M%p", localtime $self->id);
+  return lc POSIX::strftime($human_strftime_format, localtime $self->id);
+}
+
+# Generate a timestamp in the format expected by RSS
+sub timerss
+{
+  my $self = shift;
+  my $time = shift // $self->id;
+  return POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime $time)
 }
 
 sub _process

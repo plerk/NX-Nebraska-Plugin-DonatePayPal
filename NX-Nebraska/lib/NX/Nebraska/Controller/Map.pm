@@ -31,7 +31,8 @@ sub statistics :Chained('object') :PathPart('statistics') :Args(0)
     };
   }
   
-  $c->json(\@list);
+  $c->stash->{current_view} = 'JSON';
+  $c->stash->{json_data} = \@list;
 }
 
 # /map/id/[id]/places get the list of places (states, territories,
@@ -52,7 +53,9 @@ sub places :Chained('object') :PathPart('places') :Args(0)
       flag => $place->flag,
     };
   }
-  $c->json(\@list);
+  
+  $c->stash->{current_view} = 'JSON';
+  $c->stash->{json_data} = \@list;
 }
 
 # /map/id/[id]/values/[stat_id] get the values for each place for the given
@@ -71,7 +74,8 @@ sub values :Chained('object') :PathPart('values') :Args(1)
     push @list, { place_id => $value->place_id, value => $value->value };
   }
   
-  $c->json(\@list);
+  $c->stash->{current_view} = 'JSON';
+  $c->stash->{json_data} = \@list;
 }
 
 sub index :Path: Args(0)

@@ -57,7 +57,7 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
         else
           option.disabled = true;
       }
-    }
+    };
     
     /*
      * mapConfigChangeCB
@@ -104,11 +104,19 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
       
       disableStatsWithMismatchingUnits();
       return false;
-    }
+    };
     
     document.getElementById('select_all').onclick = function()
     {
       inputMap.iteratePlaces(function(aPlace) { aPlace.selectOn(); aPlace.option.selected = true; });
+      inputMap.updatePostSelect();
+      algoList.findBestFit(inputMap, outputMap);
+      return false;
+    };
+    
+    document.getElementById('toggle').onclick = function()
+    {
+      inputMap.iteratePlaces(function(aPlace) { aPlace.toggle(); aPlace.option.selected = aPlace.isSelected(); });
       inputMap.updatePostSelect();
       algoList.findBestFit(inputMap, outputMap);
       return false;
@@ -119,13 +127,13 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
       inputMap.clearAll();
       algoList.findBestFit(inputMap, outputMap);
       return false;
-    }
+    };
     
     document.getElementById('refresh_output').onclick = function()
     {
       algoList.findBestFit(inputMap, outputMap);
       return false;
-    }
+    };
     
     /*
      * swap the input and output maps, transfering the selection
@@ -248,7 +256,7 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
           });
         });
       }
-    }
+    };
     
     /*
      * statsUpdateCB
@@ -310,7 +318,7 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
       this.otherMap.statsSelector.style.display = 'block';
       
       return true;
-    }
+    };
     
     outputMap.update(
       function()
