@@ -4,7 +4,6 @@ BEGIN { $ENV{DBIC_TRACE} = 0 };
 
 use strict;
 use warnings;
-use NX::Nebraska::Import::Source::USACensus;
 use feature qw( :5.10 );
 
 my $name = shift;

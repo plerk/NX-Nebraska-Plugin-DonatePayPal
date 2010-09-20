@@ -52,7 +52,7 @@ if(NX.Nebraska.Algo === undefined) NX.Nebraska.Algo = {};
     var maybe;
     for(var i=0; i<len; i++)
     {
-      var maybe = this.list[i].execute(idealWeight, placesList);
+      maybe = this.list[i].execute(idealWeight, placesList);
       NX.Nebraska.Debug.say('#' + i + ' ' + maybe.getAlgo().getName() + ' ~> distance = ' + NX.Nebraska.Util.integerToHumanReadableNumber(maybe.distanceFromIdeal()));
       if(best == null || maybe.distanceFromIdeal() < best.distanceFromIdeal())
         best = maybe;

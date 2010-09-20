@@ -191,7 +191,7 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
             inputMap.placeById[id].selectOn();
           }
            
-          var len = inputMap.statsSelector.options.length;
+          len = inputMap.statsSelector.options.length;
           for(var i=0; i<len; i++)
           {
             if(inputMap.statsSelector.options[i].value == newInputStat)
@@ -244,7 +244,7 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
                 
                 outputMap.selectedStat = outputMap.statById[newOutputStat];
                 
-                var len=saveSelection.length;
+                len=saveSelection.length;
                 for(var i=0; i<len; i++)
                 {
                   var id = saveSelection[i];

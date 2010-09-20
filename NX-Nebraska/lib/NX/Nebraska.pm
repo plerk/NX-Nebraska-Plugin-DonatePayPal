@@ -9,7 +9,7 @@ use feature qw( :5.10 );
 use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 $VERSION = eval $VERSION;
 
 # Set flags and add plugins for the application
@@ -19,12 +19,12 @@ $VERSION = eval $VERSION;
 # Static::Simple: will serve static files from the application's root
 #                 directory
 
-use Catalyst qw/
+use Catalyst qw(
     ConfigLoader
     Static::Simple
     StackTrace
     Unicode::Encoding
-/;
+);
 
 extends 'Catalyst';
 
@@ -122,7 +122,7 @@ sub nav
 {
   my $class = shift;
   state $menu = [
-    [ '/compare'      => 'Compare'  ],
+    [ '/app/compare'  => 'Compare'  ],
     [ '/doc/about'    => 'About'    ],
     [ '/news'         => 'News'     ],
     [ '/doc/contact'  => 'Contact'  ],

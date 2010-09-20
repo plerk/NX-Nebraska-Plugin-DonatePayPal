@@ -10,6 +10,8 @@ questions and comments try the [[doc/contact][Contact]] page.}
 \<a name="compare_details">
 \h2{Compare Maps}
 
+\<a href="/compare">{\<img src="/png/compare.png" align="left">}
+
 \p{The first application [[compare][Compare Maps]] displays two maps, an 
 \em{input} and an \em{output} map.  
 

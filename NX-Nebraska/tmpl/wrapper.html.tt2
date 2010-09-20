@@ -29,7 +29,7 @@
   <body>
     <h1>[% title or "Project Nebraska" %]</h1>
     
-    <div id="main_icon_container"><center><div id="main_icon"><a href="/"><img src="/png/icon.png" /></a></div><center></div>
+    <div id="main_icon_container"><center><div id="main_icon"><a href="/"><img src="/png/[% icon_name | html %].png" /></a></div><center></div>
     
     <div class="container">
 

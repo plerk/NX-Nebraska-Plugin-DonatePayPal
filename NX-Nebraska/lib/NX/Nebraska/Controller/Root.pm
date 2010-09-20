@@ -72,6 +72,7 @@ sub begin :Private
     navs => $nav,
     ad => $ad,
     donate => $donate,
+    icon_name => 'icon',
   );
 }
 

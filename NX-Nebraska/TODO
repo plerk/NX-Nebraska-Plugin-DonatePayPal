@@ -2,6 +2,9 @@ TODO:
  - Select ALL also selects regions for which we have no data.
  - If you switch statistic, and regions for which the stat has no values
    should be de-selected.
+ - rewrite GeoNames import source 
+   http://ws.geonames.org/countryInfo?
+   http://www.geonames.org/export/web-services.html
 
 nice to have:
  - proper \foot{} and \cut{} support for Ziyal documents.

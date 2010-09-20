@@ -41,6 +41,12 @@ requires 'Config::General'; # This should reflect the config file format you've 
 test_requires 'Test::More' => '0.88';
 #catalyst;
 
+feature 'JavaScript compression',
+  -default => 0,
+  'Javascript::Closure' => 0,
+  'JSON::XS' => 0,
+  'YAML' => 0;
+
 feature 'Cacheing using Cache::Memcached::Fast (recommended)',
   -default => 1,
   'Cache::Memcached::Fast' => 0;
@@ -58,6 +64,6 @@ if($@)
     'Cache::Memcached::Mock' => 0;
 }
 
-install_script glob('script/nx_nebraska_{cgi,fastcgi,import,server}');
+install_script glob('script/nx_nebraska_{cgi,fastcgi,import,server,jspack}');
 auto_install;
 WriteAll;

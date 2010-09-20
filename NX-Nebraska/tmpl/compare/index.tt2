@@ -48,7 +48,7 @@
   <tr>
     <td align="center">
       <input type="submit" id="select_all" value="All" />
-      <input type="submit" id="toggle" value="Toggle" />
+      <input type="submit" id="toggle" value="Invert" />
       <input type="submit" id="select_none" value="None" />
     </td>
     <td align="center">

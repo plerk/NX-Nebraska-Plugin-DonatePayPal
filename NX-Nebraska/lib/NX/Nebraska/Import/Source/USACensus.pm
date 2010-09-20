@@ -59,7 +59,7 @@ sub import_data
     }
     elsif($date eq 'Census')
     {
-      push @stats, new  NX::Nebraska::Import::Stat::Population::Census(year => 2000);
+      push @stats, new NX::Nebraska::Import::Stat::Population::Census(year => 2000);
     }
   }
   

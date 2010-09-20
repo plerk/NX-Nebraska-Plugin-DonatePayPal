@@ -34,6 +34,8 @@ __PACKAGE__->result_source_instance->view_definition(q(
     map AS m ON m.id = p.map_id 
   GROUP BY 
     m.id
+  ORDER BY
+    m.name
 ));
 
 1;

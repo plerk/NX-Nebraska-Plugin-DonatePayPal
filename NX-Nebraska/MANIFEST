@@ -132,6 +132,7 @@ root/js/NX/Nebraska/Util.js
 root/png/h1.png
 root/png/h6.png
 root/png/icon.png
+root/png/compare.png
 root/png/nx1_4818.jpg
 tmpl/compare/index.tt2
 tmpl/map/add.tt2
@@ -152,6 +153,7 @@ root/svg/mx1.svg
 root/svg/ru1.svg
 root/svg/top.svg
 root/svg/us1.svg
+root/svg/xa1.svg
 root/svgweb/svg.htc
 root/svgweb/svg.js
 root/svgweb/svg.swf
@@ -162,6 +164,7 @@ script/nx_nebraska_server
 script/nx_nebraska_test
 script/nx_nebraska_deploy
 script/nx_nebraska_import
+script/nx_nebraska_jspack
 bin/create_sqlite.pl
 bin/refresh_model
 sql/mysql/000_perm.sql

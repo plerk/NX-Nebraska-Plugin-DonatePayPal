@@ -3,13 +3,33 @@ package NX::Nebraska::Controller::Compare;
 use Moose;
 use feature qw( :5.10 );
 use namespace::autoclean;
+use NX::Nebraska;
 
 BEGIN {extends 'Catalyst::Controller'; }
+
+use constant JS => [ map { "/js/NX/Nebraska/$_.js" } qw( 
+  Debug 
+  Map 
+  PopUp 
+  Ajax 
+  PageLocation 
+  Util 
+  Place 
+  Stat 
+  CompareMap 
+  AlgoList 
+  AlgoResult 
+  Compare 
+  Algo/SmallestFirst 
+  Algo/LargestFirst 
+  Algo/Optimal 
+) ];
 
 # This is the server side code for the compare functionality.
 # Most of the work is done in the JavaScript and the AJAX
 # entry points in NX::Nebraska::Controller::Map
-sub index :Path :Args(0) {
+sub compare :Chained('/') :PathPart('app/compare') :Args(0) 
+{
   my $self = shift;
   my $c = shift;
   
@@ -44,6 +64,12 @@ sub index :Path :Args(0) {
   die "bad input map" unless $input_map_code =~ /^[a-z][a-z]1$/;
   die "bad output map" unless $output_map_code =~ /^[a-z][a-z]1$/;
   
+  my $js = [ "/js/compare-$NX::Nebraska::VERSION.js" ];
+  unless(-r NX::Nebraska->config->{root} . "/js/compare-$NX::Nebraska::VERSION.js")
+  {
+    $js = JS;
+  }
+  
   $c->stash(
     news_item => $news_item,
     maps => [ 
@@ -56,28 +82,20 @@ sub index :Path :Args(0) {
         id => 'output', name => 'Output' 
       } 
     ],
-    js => [ map { "/js/NX/Nebraska/$_.js" } qw( 
-      Debug 
-      Map 
-      PopUp 
-      Ajax 
-      PageLocation 
-      Util 
-      Place 
-      Stat 
-      CompareMap 
-      AlgoList 
-      AlgoResult 
-      Compare 
-      Algo/SmallestFirst 
-      Algo/LargestFirst 
-      Algo/Optimal 
-    ) ],
+    js => $js,
     available_maps => \@maps,
     template => 'compare/index.tt2',
     about_detail => \%about_detail,
     about_summary => \%about_summary,
+    icon_name => 'compare',
   );
+}
+
+sub old_compare :Chained('/') :PathPart('compare') :Args(0) 
+{
+  my $self = shift;
+  my $c = shift;
+  $c->response->redirect('/app/compare');
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+nx_nebraska_jspack -quiet
+
 if [ ! -e /var/lib/nebraska/data.sqlite ] ; then
   sqlite3 /var/lib/nebraska/data.sqlite < /var/lib/nebraska/sql/sqlite/data.sql
 fi
