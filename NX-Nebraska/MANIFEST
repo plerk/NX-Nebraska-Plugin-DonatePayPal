@@ -20,6 +20,13 @@ lib/NX/Nebraska/Controller/News.pm
 lib/NX/Nebraska/Controller/Place.pm
 lib/NX/Nebraska/Controller/Root.pm
 lib/NX/Nebraska/Model/DB.pm
+lib/NX/Nebraska/Model/User.pm
+lib/NX/Nebraska/User.pm
+lib/NX/Nebraska/User/Result/Realm.pm
+lib/NX/Nebraska/User/Result/UserTwitter.pm
+lib/NX/Nebraska/User/Result/UserNebraska.pm
+lib/NX/Nebraska/User/Result/UserFacebook.pm
+lib/NX/Nebraska/User/Result/User.pm
 lib/NX/Nebraska/Schema.pm
 lib/NX/Nebraska/Schema/Result/IntegerStatistic.pm
 lib/NX/Nebraska/Schema/Result/IntegerStatisticForMap.pm
@@ -49,6 +56,8 @@ lib/NX/Nebraska/Import/Source.pm
 lib/NX/Nebraska/Import/Stat.pm
 lib/NX/Nebraska/Cache.pm
 lib/NX/Nebraska/View/JSON.pm
+lib/Catalyst/Authentication/Store/DBIx/Class/Twitter.pm
+lib/Catalyst/Authentication/Store/DBIx/Class/Facebook.pm
 Makefile.PL
 MANIFEST			This list of files
 META.yml
@@ -134,6 +143,8 @@ root/png/h6.png
 root/png/icon.png
 root/png/compare.png
 root/png/nx1_4818.jpg
+root/png/sign-in-with-twitter-d.png
+root/png/sign-in-with-facebook.png
 tmpl/compare/index.tt2
 tmpl/map/add.tt2
 tmpl/map/edit.tt2
@@ -146,6 +157,7 @@ tmpl/place/view.tt2
 tmpl/wrapper.html.tt2
 tmpl/wrapper.xml.tt2
 tmpl/ziyal.tt2
+tmpl/login.tt2
 root/svg/au1.svg
 root/svg/ca1.svg
 root/svg/eu1.svg
@@ -169,6 +181,7 @@ bin/create_sqlite.pl
 bin/refresh_model
 sql/mysql/000_perm.sql
 sql/mysql/010_places.sql
+sql/mysql/020_users.sql
 sql/sqlite/data.sql
 t/01app.t
 t/02pod.t
@@ -177,6 +190,7 @@ t/controller_map.t
 t/controller_news.t
 t/controller_place.t
 t/model_db.t
+t/model_user.t
 t/view_tt.t
 t/javascript.t
 t/ziyal.t

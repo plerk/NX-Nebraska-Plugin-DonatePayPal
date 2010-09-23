@@ -7,12 +7,12 @@ code under a permissive OpenSource license as soon as possible.
 See the [[doc/download][Download]] page for details.  For 
 questions and comments try the [[doc/contact][Contact]] page.}
 
-\<a name="compare_details">
+\<a name="compare_details">{}
 \h2{Compare Maps}
 
-\<a href="/compare">{\<img src="/png/compare.png" align="left">}
+\<a href="/app/compare">{\<img src="/png/compare.png" align="left">}
 
-\p{The first application [[compare][Compare Maps]] displays two maps, an 
+\p{The first application [[app/compare][Compare Maps]] displays two maps, an 
 \em{input} and an \em{output} map.  
 
 Given a statistic, such as population or area,
@@ -61,6 +61,9 @@ of the input map's weight that it is off by.  If you mouse
 over the regions in either map you will see the name of
 the region, and the value of the statistic for that region.}
 
+\cut{about privacy, contact information and terms of service}{
+
+\<a name="browser_compatibility">{}
 \h2{Browser Compatibility}
 
 \p{Short version: use the latest stable version of [[http://www.mozilla.com][Firefox]] 
@@ -79,7 +82,50 @@ Internet Explorer 8 (IE8) and earlier versions, Project Nebraska makes use of
 Flash.  When Internet Explorer 9 (IE9) comes out we will hopefully be able to add support for
 it.}
 
-\h2{Help!}
+\<a name="privacy">{}
+\h2{Privacy}
+
+\p{Unless users login to the Project Nebraska website, the Project Nebraska Team does
+not generally collect information on users aside from the normal logging of IP addresses 
+done by the Apache web server for diagnostic purposes.  These logs are periodically purged.}
+
+\p{The Project Nebraska website allows users to login using credentials provided by other
+websites, such as [[http://twitter.com][Twitter]] or [[http://www.facebook.com][Facebook]].
+We do not intentionally collect any real names or personally identifying information from
+users when they use these services to login, however we may collect computer user names, or 
+\qq{screen names} to link with accounts on these services which may contain real names or
+personally identifying information.}
+
+\p{Specifically:}
+
+\ul{
+  \li{For Twitter we store your Twitter username, which is usually not your real name.}
+  \li{For Facebook we store your Facebook UID, which is an integer assigned to you by
+      Facebook.}
+}
+
+\p{The Project Nebraska Team will store posts and settings you make on the website 
+associated with your account on these services.  This may include information about
+places you have visited or have been to, but only if you actively post this information
+of your own volition.  The Project Nebraska Team has no interest in, and will make no 
+attempt to actively track your movements.}
+
+\p{If at anytime you wish to remove the data we have collected linked with your account
+you may do so by contacting the Project Nebraska Team using
+[[doc/about#contact][the contact information below]].  The Project Nebraska reserves 
+the right to use its own its own judgement in determining the validity of these
+requests.  If the volume of users requesting removal of their data increases we may 
+provide a website interface for this task.}
+
+\<a name="contact">{}
+\h2{Contact}
+
+\p{If you want to contact the Project Nebraska Team, here are the details:}
+
+\table{
+  \tr{\th{email}\td{nx.nebraska (at) gmail.com}}
+  \tr{\th{twitter}\td{[[http://twitter.com/nxnebraska]]}}
+}
 
 \p{If you want to help there are number of things that you can do:}
 
@@ -89,4 +135,21 @@ it.}
   \li{Anything else that you can think of...}
 }
 
-\p{If you think you can help out, please use the [[doc/contact][Contact]] page.}
+\<a name="tos">{}
+\h2{Terms of Service}
+
+\p{THIS SOFTWARE IS PROVIDED BY The Project Nebraska Team ``AS IS'' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL The Project Nebraska Team OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}
+
+\p{The views and conclusions contained in the software and documentation are those of the
+authors and should not be interpreted as representing official policies, either expressed
+or implied, of The Project Nebraska Team.}
+
+}

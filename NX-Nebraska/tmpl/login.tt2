@@ -1,0 +1,65 @@
+[% SET found = 0 %]
+
+<center>
+<table>
+  <tr>
+    <td>
+
+      [% IF realms.twitter %]
+
+        <form method="post" action="/login">
+          <input type="hidden" name="return" value="[% return | html %]" />
+          <input type="hidden" name="twitter" value="1" />
+          <input type="image" value="Sign in with Twitter" src="/png/sign-in-with-twitter-d.png" />
+        </form>
+  
+        [% SET found = 1 %]
+  
+      [% END %]
+
+      [% IF realms.facebook %]
+
+        <form method="post" action="/login">
+          <input type="hidden" name="return" value="[% return | html %]" />
+          <input type="hidden" name="facebook" value="1" />
+          <input type="image" value="login" src="/png/sign-in-with-facebook.png" />
+        </form>
+  
+        [% SET found = 1 %]
+  
+      [% END %]
+      
+    </td>
+    <td width="50"></td>
+    <td>
+
+      [% IF realms.nebraska %]
+
+        <form method="post" action="/login">
+          <input type="hidden" name="return" value="[% return | html %]" />
+          <table>
+            <tr>
+              <th rowspan="2"><img height="50" src="/png/icon.png" alt="admin:" /></th><td>username:</td><td><input name="username" /></td>
+            </tr>
+            <tr>
+              <td>password:</td><td><input name="password" type="password" /></td>
+            </tr>
+          </table>
+          <input type="submit" value="login" style="display:none" />
+        </form>
+  
+        [% SET found = 1 %]
+
+      [% END %]
+      
+    </td>
+  </tr>
+</table>
+</center>
+
+[% IF found == 0 %]
+
+  <p>The administrators of this website have not set up any methods for
+  authentication, so you cannot login.</p>
+
+[% END %]

@@ -21,6 +21,8 @@ sub new
     id => $id,
     is_cached => $args{is_cached} // 1,
     c => $args{c},
+    brief => $args{brief} // 0,
+    url => "/news/item/$id/view",
   }, $class;
 }
 
@@ -44,6 +46,7 @@ sub get_news_from_directory
       filename => "$args{dir}/$fn",
       is_cached => $args{is_cached},
       c => $args{c},
+      brief => 1,
     );
   }
   return @list;
@@ -64,6 +67,7 @@ sub find_by_id
         filename => "$dir/$args{id}.zl",
         is_cached => $is_cached,
         c => $args{c},
+        brief => 0,
       ));
     }
   }
@@ -73,6 +77,8 @@ sub find_by_id
 sub filename { shift->{filename} }
 sub id { shift->{id} }
 sub is_cached { shift->{is_cached} }
+sub brief { shift->{brief} }
+sub url { shift->{url} }
 
 # Windows is lame.
 my $human_strftime_format = $^O eq 'MSWin32' ? '%d %B %Y %I:%M%p' : '%e %B %Y %I:%M%p';
@@ -99,7 +105,7 @@ sub _process
   
   return $self->{result} if defined $self->{result};
   
-  my $cache_key = "news:" . $self->id;
+  my $cache_key = "news:" . $self->id . ":" . $self->brief;
   
   if($self->is_cached)
   {
@@ -115,7 +121,11 @@ sub _process
   my $zl = do { local $/; <IN> };
   close IN;
   
-  my $doc = NX::Ziyal::ziyal2html($zl, default => $c->uri_for('/'));
+  my $doc = NX::Ziyal::ziyal2html($zl, 
+    default => $c->uri_for('/'), 
+    brief => $self->brief, 
+    url => $self->url,
+  );
   
   my %result = (
     html => $doc->html,

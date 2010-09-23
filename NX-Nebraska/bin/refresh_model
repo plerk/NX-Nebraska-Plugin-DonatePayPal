@@ -7,3 +7,12 @@ perl ./script/nx_nebraska_create \
 	'dbi:mysql:database=nebraska;host=mysql' \
 	nebraska \
 	nebraska
+
+perl ./script/nx_nebraska_create \
+	model \
+	User \
+	DBIC::Schema NX::Nebraska::User \
+	create=static \
+	'dbi:mysql:database=nebraska_user;host=mysql' \
+	nebraska \
+	nebraska

@@ -203,3 +203,34 @@ DIV.popup {
 
 DIV.summary  {
 }
+
+DIV.error_message {
+  background-color: red;
+  color: yellow;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 1.25em;
+  -moz-border-radius: 3% 3% 3% 3%;
+  font-family: 'Arial Black', 'Marker Felt', 'Impact';
+}
+
+DIV.warning_message {
+  background-color: yellow;
+  color: black;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  -moz-border-radius: 3% 3% 3% 3%;
+}
+
+DIV.user_msg {
+  text-align: right;
+  font-size: 0.8em;
+}

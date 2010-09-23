@@ -9,7 +9,7 @@ use feature qw( :5.10 );
 use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 $VERSION = eval $VERSION;
 
 # Set flags and add plugins for the application
@@ -24,6 +24,11 @@ use Catalyst qw(
     Static::Simple
     StackTrace
     Unicode::Encoding
+    Authentication
+    Session
+    Session::Store::FastMmap
+    Session::State::Cookie
+    Session::PerUser
 );
 
 extends 'Catalyst';
@@ -121,17 +126,27 @@ sub donate
 sub nav
 {
   my $class = shift;
+  
   state $menu = [
     [ '/app/compare'  => 'Compare'  ],
     [ '/doc/about'    => 'About'    ],
     [ '/news'         => 'News'     ],
-    [ '/doc/contact'  => 'Contact'  ],
+#    [ '/doc/contact'  => 'Contact'  ],
     [ '/doc/download' => 'Download' ],
   ];
 
   push @$menu, $_ for @_;
   
-  return $menu;
+  return unless defined wantarray;
+  
+  if($class->user_exists)
+  {
+    return [ @$menu, [ '/logout' => 'Logout' ] ];
+  }
+  else
+  {
+    return [ @$menu, [ '/login' => 'Login' ] ];
+  }
 }
 
 # Get an instance of an object with a 
@@ -175,9 +190,19 @@ sub ziyal
 {
   my $class = shift;
   
+  my $args = {};
+  my $use_cache = 1;
+  if(ref $_[0] eq 'HASH')
+  {
+    $args = shift;
+    $use_cache = 0;
+  }
+  
   my $cache_key = 'zl:' . join('/', @_);
   
-  my $cached = $class->memd->get($cache_key);
+  my $cached;
+  $cached = $class->memd->get($cache_key)
+    if $use_cache;
   if(defined $cached)
   {
     return @{ $cached };
@@ -191,7 +216,11 @@ sub ziyal
   my $zl = do { local $/; <IN> };
   close IN;
   
-  my $doc = NX::Ziyal::ziyal2html($zl, default => $class->uri_for('/'), var => $class->ziyal_var);
+  my $doc = NX::Ziyal::ziyal2html($zl, 
+    default => $class->uri_for('/'), 
+    var => $class->ziyal_var, 
+    %$args,
+  );
   
   my @result = (
     html => $doc->html,
@@ -199,7 +228,8 @@ sub ziyal
     template => 'ziyal.tt2',
   );
   
-  $class->memd->set($cache_key => \@result, 60*60);
+  $class->memd->set($cache_key => \@result, 60*60)
+    if $use_cache;
   
   return @result;
 }

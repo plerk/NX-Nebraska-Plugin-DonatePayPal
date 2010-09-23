@@ -1,7 +1,7 @@
 /* 
-  places schema for NX::Nebraska
-  MySQL
-*/
+ * places schema for NX::Nebraska
+ * MySQL
+ */
 
 CREATE TABLE `map` (
   id CHAR(3) PRIMARY KEY,

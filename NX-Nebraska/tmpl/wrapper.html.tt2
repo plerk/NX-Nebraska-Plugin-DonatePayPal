@@ -32,22 +32,54 @@
     <div id="main_icon_container"><center><div id="main_icon"><a href="/"><img src="/png/[% icon_name | html %].png" /></a></div><center></div>
     
     <div class="container">
-
-    [% IF navs %]
-      <center> [% # !! FIXME !! how do I do this without a <center> ?? %]
-        <div id="main_navigation">
-          <ul class="nav_list">
-            [% FOREACH nav IN navs %]
-              <li><a href="[% nav.0 | html %]">[% nav.1 | html %]</a></li>
-            [% END %]
-          </ul>
-        </div>
-      </center>
-    [% END %]
+      
+      [% IF navs %]
+        <center> [% # !! FIXME !! how do I do this without a <center> ?? %]
+          <div id="main_navigation">
+            <ul class="nav_list">
+              [% FOREACH nav IN navs %]
+                <li><a href="[% nav.0 | html %]">[% nav.1 | html %]</a></li>
+              [% END %]
+            </ul>
+          </div>
+        </center>
+      [% END %]
+      
+      [% IF error_msg %]
+        <div class="error_message">[% error_msg | html %]</div>
+      [% END %]
+      
+      [% IF warning_msg %]
+        <div class="warning_message">[% warning_msg | html %]</div>
+      [% END %]
+      
+      
+      <div class="user_msg">
+        [% IF c.user_exists %]
+          You are logged in as 
+          [% IF c.user.get_object.url %]
+            <a href="[% c.user.get_object.url | html %]">
+          [% END %]
+          [% c.user.get_object.user.name | html %]
+          [% IF c.user.get_object.url %]
+            </a>
+          [% END %]
+          from 
+          [% IF c.user.get_object.user.realm.url %]
+            <a href="[% c.user.get_object.user.realm.url | html %]">
+          [% END %]
+          [% c.user.get_object.user.realm.name | html %]
+          [% IF c.user.get_object.user.realm.url %]
+            </a>
+          [% END %]
+        [% ELSE %]
+          You are not logged in
+        [% END %]
+      </div>
     
-    <div id="main_content">
-      [% content %]
-    </div>
+      <div id="main_content">
+        [% content %]
+      </div>
     
     </div>
     

@@ -34,41 +34,63 @@ sub compare :Chained('/') :PathPart('app/compare') :Args(0)
   my $c = shift;
   
   my($news_item) = $c->get_news(limit => 1);
-  my %about_summary = $c->ziyal('doc', 'about_compare');
-  my %about_detail = $c->ziyal('doc', 'about');
   
-  my @maps = grep { $_->id ne 'top' } $c->model('DB::MapWithValues')->all;
-  
+  my $cache_data;
+  my $maps;
+  if(my $cache = $c->memd->get('app:compare'))
+  {
+    $cache_data = $cache->{list};
+    $maps = $cache->{maps};
+  }
+  else
+  {
+    # we cache a few things here that take a while.
+    
+    # rendering .zl into .html is usually time consuming
+    my %about_summary = $c->ziyal('doc', 'about_compare');
+    my %about_detail = $c->ziyal({ brief => 1, url => '/doc/about' }, 'doc', 'about');
+    
+    # this requires us to do a (very quick) disk read, but
+    # but is worth caching
+    my $js = [ "/js/compare-$NX::Nebraska::VERSION.js" ];
+    unless(-r NX::Nebraska->config->{root} . $js->[0] )
+    {
+      $js = JS;
+    }
+    
+    # SELECT with many JOINs worth caching
+    $maps = [ grep { $_->id ne 'top' } $c->model('DB::MapWithValues')->all ];
+    
+    # store as a list for easy rolling out later
+    $cache_data = [
+      about_summary => \%about_summary,
+      about_detail => \%about_detail,
+      available_maps => $maps,
+      js => $js,
+    ];
+    $c->memd->set('app:compare' => { list => $cache_data, maps => $maps }, 60*60);
+  }
+
   my $input_map_code = $c->req->param('input_map_code');
   my $output_map_code = $c->req->param('output_map_code');
   
-  my @rand_maps = map { $_->id } @maps;
+  my @rand_maps = map { $_->id } @$maps;
   
   unless(defined $input_map_code)
   {
     my $size = int @rand_maps;
     my $i = int rand $size;
     $input_map_code = splice @rand_maps, $i, 1;
-    #use YAML ();
-    #warn YAML::Dump({size => $size, i => $i, input_map_code => $input_map_code});
   }
   unless(defined $output_map_code)
   {
     my $size = int @rand_maps;
     my $i = int rand $size;
     $output_map_code = splice @rand_maps, $i, 1;
-    #use YAML ();
-    #warn YAML::Dump({size => $size, i => $i, output_map_code => $output_map_code});
   }
   
   die "bad input map" unless $input_map_code =~ /^[a-z][a-z]1$/;
   die "bad output map" unless $output_map_code =~ /^[a-z][a-z]1$/;
-  
-  my $js = [ "/js/compare-$NX::Nebraska::VERSION.js" ];
-  unless(-r NX::Nebraska->config->{root} . "/js/compare-$NX::Nebraska::VERSION.js")
-  {
-    $js = JS;
-  }
   
   $c->stash(
     news_item => $news_item,
@@ -82,11 +104,8 @@ sub compare :Chained('/') :PathPart('app/compare') :Args(0)
         id => 'output', name => 'Output' 
       } 
     ],
-    js => $js,
-    available_maps => \@maps,
     template => 'compare/index.tt2',
-    about_detail => \%about_detail,
-    about_summary => \%about_summary,
+    @$cache_data,
     icon_name => 'compare',
   );
 }
