@@ -1,0 +1,2 @@
+version=3
+http://search.cpan.org/dist/Catalyst-Authentication-Credential-FBConnect-Nebraska/   .*/Catalyst-Authentication-Credential-FBConnect-Nebraska-v?(\d[\d.-]+)\.(?:tar(?:\.gz|\.bz2)?|tgz|zip)$
