@@ -159,6 +159,13 @@ if(NX.Nebraska.Util === undefined) NX.Nebraska.Util = {};
     return new NX.Nebraska.PageLocation(x,y);
   }
   
+  NX.Nebraska.Util.escapeHTML = function(aText)
+  {
+    return aText.replace(/&/g, '&amp;')
+                .replace(/\</g, '&lt;')
+                .replace(/\>/g, '&gt;');
+  }
+  
   /*
    * ====================================================================
    */

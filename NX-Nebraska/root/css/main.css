@@ -135,19 +135,6 @@ TABLE#compare_table TR TH {
   text-align: center;
 }
 
-UL.nav_list {
-  display: inline;
-  /* border: 2px solid #00ff00; */
-  list-style-type: none;
-  padding-left: 2px;
-  white-space: nowrap;
-  font-family: 'Arial Black', 'Marker Felt', 'Impact';
-  font-variant: small-caps;
-  font-size: 1.25em;
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
 TD.state_list_cell {
   width: 200px;
   height: 140px;
@@ -201,6 +188,71 @@ DIV.popup {
   -webkit-border-radius: 3% 3% 3% 3%;
 }
 
+DIV#flickr_picker_div {
+  top: 250px;
+  color: rgb(0%, 0%, 0%);
+  background-color: rgb(100%, 100%, 100%);
+  width: 550px;
+  border: solid 1px black;
+  visibility: hidden;
+  position: absolute;
+  margin-left: 180px;
+  padding: 25px;
+  font-size: 0.80em;
+  
+  /* firefox */
+  -moz-border-radius: 3% 3% 3% 3%;
+  /* opera */
+  border-radius: 0.5% 0.5% 0.5% 0.5%;
+  /* webkit (chrome, safari) */
+  -webkit-border-radius: 3% 3% 3% 3%;
+}
+
+DIV#disconnect_error_div {
+  top: 250px;
+  color: rgb(0%, 0%, 0%);
+  background-color: rgb(100%, 100%, 100%);
+  width: 500px;
+  border: solid 1px black;
+  position: absolute;
+  margin-left: 180px;
+  padding: 25px;
+  visibility: hidden;
+
+  /* firefox */
+  -moz-border-radius: 3% 3% 3% 3%;
+  /* opera */
+  border-radius: 0.5% 0.5% 0.5% 0.5%;
+  /* webkit (chrome, safari) */
+  -webkit-border-radius: 3% 3% 3% 3%;
+}
+
+DIV#share_div {
+  top: 250px;
+  color: rgb(0%, 0%, 0%);
+  background-color: rgb(100%, 100%, 100%);
+  width: 500px;
+  border: solid 1px black;
+  margin-left: 180px;
+  padding: 25px;
+  visibility: hidden;
+  position: absolute;
+  margin-left: 180px;
+  padding: 25px;
+  
+  /* firefox */
+  -moz-border-radius: 3% 3% 3% 3%;
+  /* opera */
+  border-radius: 0.5% 0.5% 0.5% 0.5%;
+  /* webkit (chrome, safari) */
+  -webkit-border-radius: 3% 3% 3% 3%;
+}
+
+DIV#share_div INPUT#share_url, DIV#share_div INPUT#share_url_place {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 DIV.summary  {
 }
 
@@ -233,4 +285,33 @@ DIV.warning_message {
 DIV.user_msg {
   text-align: right;
   font-size: 0.8em;
+}
+
+TD#map_cell {
+  width: 490px;
+  height: 427px;
+}
+
+TD#place_cell {
+  width: 490px;
+}
+
+TEXTAREA.trip_place_textarea {
+  width: 480px;
+  height: 100px;
+}
+
+INPUT.v_control_buttons {
+  display: block;
+}
+
+IMG#flickr_picture_img {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+DIV#youtube_video_div {
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
 }

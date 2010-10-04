@@ -4,8 +4,8 @@
  */
 
 CREATE TABLE `map` (
-  id CHAR(3) PRIMARY KEY,
-  country_code CHAR(2),
+  id CHAR(3) CHARACTER SET latin1 PRIMARY KEY, /* convert to latin1 */
+  country_code CHAR(2) CHARACTER SET latin1,
   name VARCHAR(128)
 )
 ENGINE=INNODB;
@@ -27,11 +27,11 @@ CREATE TABLE place (
   FOREIGN KEY (parent_id) REFERENCES place(id),
   
 /* refrences the map table. */
-  map_id CHAR(3) NOT NULL,
+  map_id CHAR(3) CHARACTER SET latin1 NOT NULL,
   FOREIGN KEY (map_id) REFERENCES `map`(id),
   
-  map_code VARCHAR(10),
-  flag VARCHAR(10),
+  map_code VARCHAR(10) CHARACTER SET latin1,
+  flag VARCHAR(10) CHARACTER SET latin1,
   
   UNIQUE(map_id, name),
   UNIQUE(map_id, map_code)
@@ -67,5 +67,34 @@ CREATE TABLE integer_value (
   `value` INTEGER,
   
   PRIMARY KEY (place_id, integer_statistic_id, `year`)
+)
+ENGINE=INNODB;
+
+CREATE TABLE trip_place (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  country_code CHAR(2) CHARACTER SET latin1 NOT NULL, /* convert to latin1 */
+  region_code VARCHAR(3) CHARACTER SET latin1,        /* convert to latin1 */
+  flag TINYINT(1),
+  name VARCHAR(64) NOT NULL
+)
+ENGINE=INNODB;
+
+CREATE TABLE trip_place_map (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  trip_place_id INTEGER NOT NULL,
+  FOREIGN KEY (trip_place_id) REFERENCES trip_place(id),
+  map_id CHAR(3) CHARACTER SET latin1,
+  FOREIGN KEY (map_id) REFERENCES map(id),
+  map_code VARCHAR(10) CHARACTER SET latin1,
+  small TINYINT(1) NOT NULL DEFAULT 0
+)
+ENGINE=INNODB;
+
+CREATE TABLE factoid (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  trip_place_id INTEGER NOT NULL,
+  FOREIGN KEY (trip_place_id) REFERENCES trip_place(id),
+  factoid VARCHAR(256) NOT NULL,
+  url VARCHAR(256)
 )
 ENGINE=INNODB;

@@ -6,7 +6,8 @@
  */
 if(NX === undefined) var NX = {};
 if(NX.Nebraska === undefined) NX.Nebraska = {};
-if(NX.Nebraska.Algo === undefined) NX.Nebraska.Algo = {};
+if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
+if(NX.Nebraska.Compare.Algo === undefined) NX.Nebraska.Compare.Algo = {};
 
 (function ()
 {
@@ -15,18 +16,18 @@ if(NX.Nebraska.Algo === undefined) NX.Nebraska.Algo = {};
    * ====================================================================
    */
    
-  NX.Nebraska.Algo.SmallestFirst = function()
+  NX.Nebraska.Compare.Algo.SmallestFirst = function()
   {
   }
   
-  NX.Nebraska.Algo.SmallestFirst.prototype.getName = function()
+  NX.Nebraska.Compare.Algo.SmallestFirst.prototype.getName = function()
   {
     return "smallest first";
   }
   
-  NX.Nebraska.Algo.SmallestFirst.prototype.execute = function(aIdealWeight, aPlaceList)
+  NX.Nebraska.Compare.Algo.SmallestFirst.prototype.execute = function(aIdealWeight, aPlaceList)
   {
-    var result = new NX.Nebraska.AlgoResult(this, aIdealWeight);
+    var result = new NX.Nebraska.Compare.AlgoResult(this, aIdealWeight);
     
     var len = aPlaceList.length;
     var weight = 0;

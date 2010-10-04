@@ -23,26 +23,33 @@
     [% END %]
     <style type="text/css" media="all">
       @import url("/css/main.css");
+      @import url("/css/menu.css");
     </style>
   </head>
   
   <body>
     <h1>[% title or "Project Nebraska" %]</h1>
     
-    <div id="main_icon_container"><center><div id="main_icon"><a href="/"><img src="/png/[% icon_name | html %].png" /></a></div><center></div>
+    <div id="main_icon_container"><center><div id="main_icon"><a href="[% icon_url %]"><img src="/png/[% icon_name | html %].png" /></a></div><center></div>
     
     <div class="container">
       
-      [% IF navs %]
-        <center> [% # !! FIXME !! how do I do this without a <center> ?? %]
-          <div id="main_navigation">
-            <ul class="nav_list">
-              [% FOREACH nav IN navs %]
-                <li><a href="[% nav.0 | html %]">[% nav.1 | html %]</a></li>
-              [% END %]
-            </ul>
-          </div>
-        </center>
+      [% IF c.nav %]
+        <div id="main_navigation">
+          <ul class="main_navigation_menu">
+            [% FOREACH nav IN c.nav %]
+              <li class="main_navigation_top"><a class="main_navigation_top_link" href="[% nav.0 | html %]">[% nav.1 | html %]</a>
+                [% IF nav.2 %]
+                  <ul class="main_navigation_sub">
+                    [% FOREACH nav2 IN nav.2 %]
+                      <li><a href="[% nav2.0 | html %]">[% nav2.1 | html %]</a></li>
+                    [% END %]
+                  </ul>
+                [% END %]
+              </li>
+            [% END %]
+          </ul>
+        </div>
       [% END %]
       
       [% IF error_msg %]

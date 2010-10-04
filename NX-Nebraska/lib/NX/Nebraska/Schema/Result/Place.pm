@@ -143,6 +143,12 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07000 @ 2010-08-30 16:27:43
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EjumE4kzH7EOkY6r8g6oxQ
 
+sub most_interesting_statistic
+{
+  my $self = shift;
+  my $units = shift;
+  return $self->result_source->schema->resultset('MostInterestingStatistic')->search({ }, { bind => [ $self->id, $units]})->first;
+}
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

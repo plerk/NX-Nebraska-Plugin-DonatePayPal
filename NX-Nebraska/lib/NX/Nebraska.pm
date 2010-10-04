@@ -9,7 +9,7 @@ use feature qw( :5.10 );
 use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 $VERSION = eval $VERSION;
 
 # Set flags and add plugins for the application
@@ -68,6 +68,183 @@ do {
 
 };
 
+sub guess_user_country_code
+{
+  my $self = shift;
+  my $ip = shift;
+  my $value = shift;
+  
+  if(defined $value)
+  {
+    return $self->session->{guess_user_country_code} = $value;
+  }
+  
+  if(exists $self->session->{guess_user_country_code})
+  {
+    return $self->session->{guess_user_country_code};
+  }
+
+  state $okay;
+  return undef if defined $okay && $okay == 0;
+
+  state $gi;
+  unless(defined $gi)
+  {
+    eval "use Geo::IP";
+    $gi = eval { Geo::IP->open($self->config->{GeoIP}) };
+    unless(defined $gi)
+    {
+      $okay = 0;
+      return 0;
+    }
+  }
+  
+  my $code = $gi->country_code_by_addr($ip);
+  unless(defined $code)
+  {
+    return $self->session->{guess_user_country_code} = undef;
+  }
+  
+  return $self->session->{guess_user_country_code} = lc $code;
+}
+
+sub flickr
+{
+  my $self = shift;
+  state $no_flickr = 0;
+  return undef if $no_flickr;
+  state $flickr;
+  return $flickr if $flickr;
+  
+  eval "use NX::Flickr";
+  warn $@ if $@;
+  $flickr = NX::Flickr->new({
+    key => $self->config->{Flickr}->{key},
+    secret => $self->config->{Flickr}->{secret},
+  });
+  $flickr->api->env_proxy;
+  
+  if(defined $flickr)
+  {
+    return $flickr;
+  }
+  else
+  {
+    $no_flickr = 1;
+    return undef;
+  }
+}
+
+sub flickr_user
+{
+  my $self = shift;
+  if($self->user_exists)
+  {
+    return $self->user->get_object->user->flickr_user;
+  }
+  else
+  {
+    return undef;
+  }
+}
+
+# Trip Journal allows use by logged in users as well as anon users.
+# we jump through some manual hoops here, because we want the user
+# to revery to the anon user version of himself if he logs in and
+# then back out again.
+#
+# The security on this is very poor, and needs to be fixed.
+sub trip_user_id
+{
+  my $self = shift;
+  my $args = shift // { try_real_user => 1, recycle => 0, };
+  state $chars = ['a'..'z', 'A'..'Z', '0'..'9'];
+  
+  if($args->{recycle})
+  {
+    delete $self->request->cookies->{anon_trip_user};
+    delete $self->request->cookies->{anon_trip_user_secret};
+  }
+  
+  return $self->user->id if $args->{try_real_user} && $self->user_exists;
+
+  if(exists $self->request->cookies->{anon_trip_user} && exists $self->request->cookies->{anon_trip_user_secret})
+  {
+    my $user_id = $self->request->cookies->{anon_trip_user}->value;
+    my $secret = $self->request->cookies->{anon_trip_user_secret}->value;
+    my $cache_key = join(':', 'trip_user_id', $user_id, $secret);
+    my $cache_data = $self->memd->get($cache_key);
+    return $cache_data if defined $cache_data;
+    
+    if($secret =~ /^[a-zA-Z0-9]{64}$/)
+    {
+      my $user = $self->model('User::UserAnon')->search({ 
+        user_id => $user_id, 
+        secret => $secret,
+        free => 0,
+      })->first;
+      if(defined $user)
+      {
+        # towards the end of the life of the anon user (assuming
+        # no memcached restarts which could happen) we only 
+        # cache for 15 minutes.
+        $self->memd->set($cache_key => $user_id, 15*60);
+        return $user_id;
+      }
+    }
+  }
+  
+  # try to use a recycled anon user first
+  $self->model('User')->schema->storage->dbh_do(
+    sub { $_[1]->do(qq{ LOCK TABLES user_anon AS user_anon WRITE, user_anon AS me WRITE }) },
+  );
+  my $auser = $self->model('User::UserAnon')->search({ free => 1 })->first;
+  if(defined $auser)
+  {
+    $auser->free(0);
+    $auser->secret(join('', map { $chars->[rand int @$chars] } 1..64));
+    $auser->update;
+    $self->model('User')->schema->storage->dbh_do(
+      sub { $_[1]->do(qq{ UNLOCK TABLES }) },
+    );
+  }
+  else
+  {
+    $self->model('User')->schema->storage->dbh_do(
+      sub { $_[1]->do(qq{ UNLOCK TABLES }) },
+    );
+    my $realm = $self->model('User::Realm')->search({ name => 'anonymous' })->first;
+    my $user = $self->model('User::User')->create({
+      realm_id => $realm->id,
+      name => 'rand_' . int rand 1024,
+    });
+    $user->name('id_' . $user->id);
+    $user->update;
+    $auser = $self->model('User::UserAnon')->create({
+      user_id => $user->id,
+      secret => join('', map { $chars->[rand int @$chars] } 1..64),
+      free => 0,
+    });
+  }
+  
+  $self->response->cookies->{anon_trip_user} = {
+    value => $auser->user_id,
+    expires => '+6h',
+  };
+  
+  $self->response->cookies->{anon_trip_user_secret} = {
+    value => $auser->secret,
+    expires => '+6h',
+  };
+  
+  # On the initial set we set it to 5 hrs because the cookie is going to
+  # be alive for at least six hours.
+  my $cache_key = join(':', 'trip_user_id', $auser->user_id, $auser->secret);
+  $self->memd->set($cache_key => $auser->user_id, 5*60*60);
+  
+  return $auser->user_id;
+}
+
 # Provider objects for ads and donate buttons.
 # We're going to use AdSense and PayPal for
 # the main site, but the idea is that you could
@@ -123,21 +300,116 @@ sub donate
   }
 }
 
+sub apps
+{
+  my $class = shift;
+  state $apps = [
+    [ '/app/compare'  => 'Compare Maps' ],
+    [ '/app/trip'     => 'Trip Journal' ],
+  ];
+  
+  push @$apps, $_ for @_;
+  
+  return unless defined wantarray;
+  
+  return $apps;
+}
+
+sub app_extras
+{
+  my $self = shift;
+  my $args = shift;
+  
+  my $short_app_name = $args->{short_app_name};
+  my $js_list = $args->{js_list};
+  my $map_list_class = $args->{map_list_class};
+  
+  my $cache_key = "app:$short_app_name";
+  if(my $cache = $self->memd->get($cache_key))
+  {
+    return ($cache->{list}, $cache->{maps})
+  }
+  # we cache a few things here that take a while.
+  
+  # rendering .zl into .html is usually time consuming
+  my %about_summary = $self->ziyal('doc', "about_$short_app_name");
+  my %about_detail = $self->ziyal({ brief => 1, url => '/doc/about' }, 'doc', 'about');
+  
+  my $js = [];
+  if(defined $js_list)
+  {
+    # this requires us to do a (very quick) disk read, but
+    # but is worth caching
+    $js = [ "/js/$short_app_name-$NX::Nebraska::VERSION.js" ];
+    unless(-r NX::Nebraska->config->{root} . $js->[0] )
+    {
+      $js = $js_list;
+    }
+  }
+  
+  my $maps = [];
+  if(defined $map_list_class)
+  {
+    # SELECT with many JOINs worth caching
+    #
+    # we store a hash ref with the id and name because we only
+    # need the id and name, and this gets cached in memcached, 
+    # and there really isn't any need to cache all the database
+    # baggage that comes with it if you store the whole object.
+    $maps = [ map { { id => $_->id, name => $_->name } } grep { $_->id ne 'top' } $self->model($map_list_class)->all ];
+  }
+  
+  # store as a list for easy rolling out later
+  my $cache_data = [
+    about_summary => \%about_summary,
+    about_detail => \%about_detail,
+    available_maps => $maps,
+    js => $js,
+  ];
+  
+  if(defined $args->{sub})
+  {
+    push @$cache_data, $args->{sub}->();
+  }
+  
+  $self->memd->set($cache_key => { list => $cache_data, maps => $maps }, 60*60);
+  
+  return ($cache_data, $maps);
+}
+
 sub nav
 {
   my $class = shift;
   
+  state $news_menu = [];
   state $menu = [
-    [ '/app/compare'  => 'Compare'  ],
-    [ '/doc/about'    => 'About'    ],
-    [ '/news'         => 'News'     ],
-#    [ '/doc/contact'  => 'Contact'  ],
-    [ '/doc/download' => 'Download' ],
+    [ '/app'          => 'Applications', $class->apps                   ],
+    [ '/doc/about'    => 'About',
+      [ [ '/doc/about'                       => 'General'               ],
+        [ '/doc/about#compare_details'       => 'About Compare Maps'    ],
+        [ '/doc/about#trip_details'          => 'About Trip Journal'    ],
+        [ '/doc/about#browser_compatibility' => 'Browser Compatibility' ], 
+        [ '/doc/about#privacy'               => 'Privacy Policy'        ],
+        [ '/doc/about#contact'               => 'Contact'               ], 
+        [ '/doc/about#tos'                   => 'Terms of Service'      ], ], ],
+    [ '/news'         => 'News', $news_menu                             ],
+    [ '/doc/download' => 'Download',
+      [ [ 'http://nebraska.wdlabs.com/svn'   => 'Subversion'            ], ], ],
   ];
-
+  
   push @$menu, $_ for @_;
   
   return unless defined wantarray;
+  
+  if(my $cache = $class->memd->get('menu:news'))
+  {
+    @$news_menu = @$cache;
+  }
+  else
+  {
+    @$news_menu = map { [ '/news/item/' . $_->id . '/view' => $_->title ] } $class->get_news;
+    $class->memd->set('menu:news' => $news_menu, 15*60);
+  }
   
   if($class->user_exists)
   {

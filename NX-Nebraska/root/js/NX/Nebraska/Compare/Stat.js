@@ -8,6 +8,7 @@
 
 if(NX === undefined) var NX = {};
 if(NX.Nebraska === undefined) NX.Nebraska = {};
+if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
 
 (function ()
 {
@@ -16,7 +17,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
    * ====================================================================
    */
   
-  NX.Nebraska.Stat = function(aId, aName, aYear, aUnits, aIsPrimary)
+  NX.Nebraska.Compare.Stat = function(aId, aName, aYear, aUnits, aIsPrimary)
   {
     this.id = aId;
     this.name = aName;
@@ -28,7 +29,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
       this.is_primary = false;
   }
   
-  NX.Nebraska.Stat.prototype.getLabel = function()
+  NX.Nebraska.Compare.Stat.prototype.getLabel = function()
   {
     return this.name + ' ' + this.year;
   }

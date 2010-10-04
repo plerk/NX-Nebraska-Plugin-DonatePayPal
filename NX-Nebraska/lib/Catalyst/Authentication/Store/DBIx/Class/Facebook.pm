@@ -13,10 +13,8 @@ sub auto_create_user
   do {
     # session_expires session_key session_uid
     my $realm = $c->model('User::Realm')->search({ name => 'facebook' })->first;
-    # !! FIXME !! come up with a better auto name, AND
-    # get a real username.
     my $user = $c->model('User::User')->create({
-      name => 'id:' . $authinfo->{session_uid},
+      name => 'id_' . $authinfo->{session_uid},
       realm_id => $realm->id,
     });
     my $facebook_user = $c->model('User::UserFacebook')->create({

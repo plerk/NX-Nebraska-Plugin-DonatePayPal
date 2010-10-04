@@ -8,6 +8,7 @@
 
 if(NX === undefined) var NX = {};
 if(NX.Nebraska === undefined) NX.Nebraska = {};
+if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
 
 (function ()
 {
@@ -16,7 +17,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
    * ====================================================================
    */
    
-  NX.Nebraska.AlgoResult = function(aAlgo, aIdealWeight)
+  NX.Nebraska.Compare.AlgoResult = function(aAlgo, aIdealWeight)
   {
     this.algo = aAlgo;
     this.list = [];
@@ -24,22 +25,22 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     this.idealWeight = aIdealWeight;
   }
   
-  NX.Nebraska.AlgoResult.prototype.distanceFromIdeal = function()
+  NX.Nebraska.Compare.AlgoResult.prototype.distanceFromIdeal = function()
   {
     return Math.abs(this.idealWeight - this.weight);
   }
   
-  NX.Nebraska.AlgoResult.prototype.getIdealWeight = function()
+  NX.Nebraska.Compare.AlgoResult.prototype.getIdealWeight = function()
   {
     return this.idealWeight;
   }
   
-  NX.Nebraska.AlgoResult.prototype.percentDistanceFromIdeal = function()
+  NX.Nebraska.Compare.AlgoResult.prototype.percentDistanceFromIdeal = function()
   {
     return 100 * this.distanceFromIdeal() / this.getIdealWeight();
   }
   
-  NX.Nebraska.AlgoResult.prototype.distanceColour = function()
+  NX.Nebraska.Compare.AlgoResult.prototype.distanceColour = function()
   {
     var percent = this.percentDistanceFromIdeal();
     if(percent < 5)
@@ -60,7 +61,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     }
   }
   
-  NX.Nebraska.AlgoResult.prototype.distanceDirection = function()
+  NX.Nebraska.Compare.AlgoResult.prototype.distanceDirection = function()
   {
     if(this.idealWeight < this.weight)
       return 'larger by';
@@ -70,36 +71,36 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
       return 'smaller by';
   }
   
-  NX.Nebraska.AlgoResult.prototype.getWeight = function()
+  NX.Nebraska.Compare.AlgoResult.prototype.getWeight = function()
   {
     return this.weight;
   }
   
-  NX.Nebraska.AlgoResult.prototype.getAlgo = function()
+  NX.Nebraska.Compare.AlgoResult.prototype.getAlgo = function()
   {
     return this.algo;
   }
   
-  NX.Nebraska.AlgoResult.prototype.addPlace = function(aPlace)
+  NX.Nebraska.Compare.AlgoResult.prototype.addPlace = function(aPlace)
   {
     this.list.push(aPlace);
     this.weight += aPlace.getValue();
   }
   
-  NX.Nebraska.AlgoResult.prototype.applyResultToMap = function(aMap)
+  NX.Nebraska.Compare.AlgoResult.prototype.applyResultToMap = function(aMap)
   {
     aMap.iteratePlaces(function(aPlace) { aPlace.selectOff(); });
     this.iteratePlaces(function(aPlace) { aPlace.selectOn(); });
     aMap.updatePostSelect(this);
   }
   
-  NX.Nebraska.AlgoResult.prototype.mergeResults = function(aAlgoResult)
+  NX.Nebraska.Compare.AlgoResult.prototype.mergeResults = function(aAlgoResult)
   {
     var self = this;
     aAlgoResult.iteratePlaces(function(aPlace) { self.addPlace(aPlace); });
   }
   
-  NX.Nebraska.AlgoResult.prototype.iteratePlaces = function(aFunction)
+  NX.Nebraska.Compare.AlgoResult.prototype.iteratePlaces = function(aFunction)
   {
     var len = this.list.length;
     for(var i=0; i<len; i++)

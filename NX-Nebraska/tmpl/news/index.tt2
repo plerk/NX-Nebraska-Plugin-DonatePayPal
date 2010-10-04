@@ -4,6 +4,6 @@
     <h4>[% item.timestr | html %]</h4>
     [% item.html %]
     <p><a href="/news/item/[% item.id | html %]/view">link</a></p>
-    [% IF ad %]<center>[% ad.ad_wide %]</center>[% END %]
+    [% IF c.ad %]<center>[% c.ad.ad_wide %]</center>[% END %]
   </div>
 [% END %]

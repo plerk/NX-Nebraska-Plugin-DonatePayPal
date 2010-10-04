@@ -173,6 +173,8 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
       var eventName;
       if(aEventName == 'onmousemove')
         eventName = 'mousemove';
+      if(aEventName == 'onmouseover')
+        eventName = 'onmouseover';
       else if(aEventName == 'onmouseout')
         eventName = 'mouseout';
       else if(aEventName == 'onclick')

@@ -22,11 +22,21 @@
         <form method="post" action="/login">
           <input type="hidden" name="return" value="[% return | html %]" />
           <input type="hidden" name="facebook" value="1" />
-          <input type="image" value="login" src="/png/sign-in-with-facebook.png" />
+          <input type="image" value="Sign in with Facebook" src="/png/sign-in-with-facebook.png" />
         </form>
   
         [% SET found = 1 %]
   
+      [% END %]
+      
+      [% IF realms.flickr %]
+      
+        <form method="post" action="/login">
+          <input type="hidden" name="return" value="[% return | html %]" />
+          <input type="hidden" name="flickr" value="1" />
+          <input type="image" value="Sign in with Flickr" src="/png/sign-in-with-flickr.png" />
+        </form>
+      
       [% END %]
       
     </td>
@@ -45,6 +55,8 @@
               <td>password:</td><td><input name="password" type="password" /></td>
             </tr>
           </table>
+          [%# without a submit button, we can't just press <ENTER>, but don't really want a submit button, so we add a submit button
+              and then make it invisible by using CSS %]
           <input type="submit" value="login" style="display:none" />
         </form>
   

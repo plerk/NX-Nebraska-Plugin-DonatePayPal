@@ -9,7 +9,8 @@ someone gave you the wrong URL.}
 map applications:}
 
 \ul{
-  \li{[[compare][Compare Maps]]}
+  \li{[[app/compare][Compare Maps]]}
+  \li{[[app/trip][Trip Journal]]}
 }
 
 \p{For more information see the [[doc/about][About]] page.}

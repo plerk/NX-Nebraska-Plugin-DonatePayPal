@@ -13,6 +13,7 @@
 
 if(NX === undefined) var NX = {};
 if(NX.Nebraska === undefined) NX.Nebraska = {};
+if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
 
 (function ()
 {
@@ -23,7 +24,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
   
   var last_event = null;
   
-  NX.Nebraska.Place = function(aMap, aId, aName, aCode, aFlag, aOption)
+  NX.Nebraska.Compare.Place = function(aMap, aId, aName, aCode, aFlag, aOption)
   {
     this.id = aId;
     this.name = aName;
@@ -45,6 +46,8 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
       NX.Nebraska.Debug.say("unable to find " + aCode + " in map");
       return;
     }
+    
+    place.map.paint(place.code, '#d3d3d3');
     
     this.map.addCallback(aCode, 'onmousemove', 
       function(aId, aState, aEvent) 
@@ -123,7 +126,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     }
   }
   
-  NX.Nebraska.Place.prototype.setStatAndValue = function(aStat, aValue)
+  NX.Nebraska.Compare.Place.prototype.setStatAndValue = function(aStat, aValue)
   {
     this.stat = aStat;
     this.value = aValue;
@@ -139,29 +142,29 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     this.pop.setHTML(newHTML);
   }
   
-  NX.Nebraska.Place.prototype.getValue = function()
+  NX.Nebraska.Compare.Place.prototype.getValue = function()
   {
     return this.value;
   }
   
-  NX.Nebraska.Place.prototype.getName = function()
+  NX.Nebraska.Compare.Place.prototype.getName = function()
   {
     return this.name;
   }
   
-  NX.Nebraska.Place.prototype.isSelected = function()
+  NX.Nebraska.Compare.Place.prototype.isSelected = function()
   {
     return this.selected;
   }
   
-  NX.Nebraska.Place.prototype.clearStatAndValue = function()
+  NX.Nebraska.Compare.Place.prototype.clearStatAndValue = function()
   {
     this.stat = null;
     this.value = 0;
     this.pop.setHTML('<b>' + this.name + '</b>');
   }
   
-  NX.Nebraska.Place.prototype.selectOn = function()
+  NX.Nebraska.Compare.Place.prototype.selectOn = function()
   {
     if(this.selected)
       return;
@@ -170,7 +173,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
       this.map.paint(this.code, '#007f00');
   }
   
-  NX.Nebraska.Place.prototype.selectOff = function()
+  NX.Nebraska.Compare.Place.prototype.selectOff = function()
   {
     if(!this.selected)
       return;
@@ -179,7 +182,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
       this.map.paint(this.code, '#d3d3d3');
   }
   
-  NX.Nebraska.Place.prototype.toggle = function()
+  NX.Nebraska.Compare.Place.prototype.toggle = function()
   {
     if(this.selected)
       this.selectOff();

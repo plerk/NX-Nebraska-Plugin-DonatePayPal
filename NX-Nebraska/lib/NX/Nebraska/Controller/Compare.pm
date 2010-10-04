@@ -14,15 +14,16 @@ use constant JS => [ map { "/js/NX/Nebraska/$_.js" } qw(
   Ajax 
   PageLocation 
   Util 
-  Place 
-  Stat 
-  CompareMap 
-  AlgoList 
-  AlgoResult 
-  Compare 
-  Algo/SmallestFirst 
-  Algo/LargestFirst 
-  Algo/Optimal 
+  JSON
+  Compare/Place 
+  Compare/Stat 
+  Compare/Map 
+  Compare/AlgoList 
+  Compare/AlgoResult
+  Compare/Main
+  Compare/Algo/SmallestFirst 
+  Compare/Algo/LargestFirst 
+  Compare/Algo/Optimal 
 ) ];
 
 # This is the server side code for the compare functionality.
@@ -35,46 +36,16 @@ sub compare :Chained('/') :PathPart('app/compare') :Args(0)
   
   my($news_item) = $c->get_news(limit => 1);
   
-  my $cache_data;
-  my $maps;
-  if(my $cache = $c->memd->get('app:compare'))
-  {
-    $cache_data = $cache->{list};
-    $maps = $cache->{maps};
-  }
-  else
-  {
-    # we cache a few things here that take a while.
-    
-    # rendering .zl into .html is usually time consuming
-    my %about_summary = $c->ziyal('doc', 'about_compare');
-    my %about_detail = $c->ziyal({ brief => 1, url => '/doc/about' }, 'doc', 'about');
-    
-    # this requires us to do a (very quick) disk read, but
-    # but is worth caching
-    my $js = [ "/js/compare-$NX::Nebraska::VERSION.js" ];
-    unless(-r NX::Nebraska->config->{root} . $js->[0] )
-    {
-      $js = JS;
-    }
-    
-    # SELECT with many JOINs worth caching
-    $maps = [ grep { $_->id ne 'top' } $c->model('DB::MapWithValues')->all ];
-    
-    # store as a list for easy rolling out later
-    $cache_data = [
-      about_summary => \%about_summary,
-      about_detail => \%about_detail,
-      available_maps => $maps,
-      js => $js,
-    ];
-    $c->memd->set('app:compare' => { list => $cache_data, maps => $maps }, 60*60);
-  }
+  my($cache_data, $maps) = $c->app_extras({
+    short_app_name => 'compare',
+    js_list => JS(),
+    map_list_class => 'DB::MapWithValues',
+  });
 
   my $input_map_code = $c->req->param('input_map_code');
   my $output_map_code = $c->req->param('output_map_code');
   
-  my @rand_maps = map { $_->id } @$maps;
+  my @rand_maps = map { $_->{id} } @$maps;
   
   unless(defined $input_map_code)
   {
@@ -94,6 +65,7 @@ sub compare :Chained('/') :PathPart('app/compare') :Args(0)
   
   $c->stash(
     news_item => $news_item,
+    icon_url => '/app/compare',
     maps => [ 
       { 
         default => $input_map_code, 
@@ -104,7 +76,7 @@ sub compare :Chained('/') :PathPart('app/compare') :Args(0)
         id => 'output', name => 'Output' 
       } 
     ],
-    template => 'compare/index.tt2',
+    template => 'app/compare.tt2',
     @$cache_data,
     icon_name => 'compare',
   );

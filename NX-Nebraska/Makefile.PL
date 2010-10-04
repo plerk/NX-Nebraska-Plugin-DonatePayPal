@@ -42,7 +42,10 @@ requires 'DBD::mysql';
 requires 'DBD::SQLite';
 requires 'Moose';
 requires 'NX::Ziyal' => '0.03';
+requires 'List::Util';
 requires 'namespace::autoclean';
+requires 'DateTime::Format::MySQL';
+requires 'JSON::XS';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
 test_requires 'Test::More' => '0.88';
@@ -51,12 +54,20 @@ test_requires 'Test::More' => '0.88';
 feature 'JavaScript compression',
   -default => 0,
   'Javascript::Closure' => 0,
-  'JSON::XS' => 0,
   'YAML' => 0;
 
 feature 'Cacheing using Cache::Memcached::Fast (recommended)',
   -default => 1,
   'Cache::Memcached::Fast' => 0;
+
+feature 'User country code detection',
+  -default => 0,
+  'Geo::IP' => 0;
+
+feature 'Flickr authentication and pictures',
+  -default => 0,
+  'Flickr::API' => 0,
+  'NX::Flickr' => 0;
 
 eval "use Cache::Memcached::Fast";
 if($@)
@@ -71,6 +82,6 @@ if($@)
     'Cache::Memcached::Mock' => 0;
 }
 
-install_script glob('script/nx_nebraska_{cgi,fastcgi,import,server,jspack}');
+install_script glob('script/nx_nebraska_{cgi,fastcgi,import,server,jspack,trip_setup}');
 auto_install;
 WriteAll;

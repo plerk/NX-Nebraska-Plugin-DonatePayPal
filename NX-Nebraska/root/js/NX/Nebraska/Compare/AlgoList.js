@@ -8,7 +8,8 @@
  */
 if(NX === undefined) var NX = {};
 if(NX.Nebraska === undefined) NX.Nebraska = {};
-if(NX.Nebraska.Algo === undefined) NX.Nebraska.Algo = {};
+if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
+if(NX.Nebraska.Compare.Algo === undefined) NX.Nebraska.Compare.Algo = {};
 
 (function ()
 {
@@ -17,17 +18,17 @@ if(NX.Nebraska.Algo === undefined) NX.Nebraska.Algo = {};
    * ====================================================================
    */
   
-  NX.Nebraska.AlgoList = function()
+  NX.Nebraska.Compare.AlgoList = function()
   {
     this.list = [];
   }
   
-  NX.Nebraska.AlgoList.prototype.add = function(aAlgo)
+  NX.Nebraska.Compare.AlgoList.prototype.add = function(aAlgo)
   {
     this.list.push(aAlgo);
   }
   
-  NX.Nebraska.AlgoList.prototype.findBestFit = function(aInputMap, aOutputMap)
+  NX.Nebraska.Compare.AlgoList.prototype.findBestFit = function(aInputMap, aOutputMap)
   {
     var idealWeight = aInputMap.getWeight();
     NX.Nebraska.Debug.clear();

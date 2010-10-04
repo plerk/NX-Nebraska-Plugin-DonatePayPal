@@ -86,7 +86,7 @@
   </tr>
 </table>
 
-[% IF ad %]<center>[% ad.ad_wide %]</center>[% END %]
+[% IF c.ad %]<center>[% c.ad.ad_wide %]</center>[% END %]
 
 <table>
   <tr>
@@ -112,7 +112,7 @@
           [% news_item.html %]
           <p><a href="/news">more news</a> | <a href="/news/item/[% news_item.id | html %]/view">link</a></p>
         [% END %]
-        [% IF ad %]<center>[% ad.ad_rectangle %]</center>[% END %]
+        [% IF c.ad %]<center>[% c.ad.ad_rectangle %]</center>[% END %]
       </div>
       
     </td>

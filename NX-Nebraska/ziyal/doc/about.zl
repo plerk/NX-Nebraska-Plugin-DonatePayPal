@@ -61,6 +61,36 @@ of the input map's weight that it is off by.  If you mouse
 over the regions in either map you will see the name of
 the region, and the value of the statistic for that region.}
 
+\<a name="trip_details">{}
+\h2{Trip Journal}
+
+\p{Trip Journal lets you keep track of the states, provinces or countries in a region
+that you have been to, and share your thoughts, photos and videos from these places
+with your friends and family.  First select a map using the map selector above the
+map (if you want to work with something other than the default).  Next select regions
+in the map that you have been.  For each region you select, you will get a small
+info display to the right of the map.  Click on the button \em{I've visited here} to 
+mark it as a place you have been.}
+
+\p{From there you can add a comment about this place in the text box under the region's
+name and factoid.  If you are logged on you can also attach a YouTube video or a photo
+from your Flickr account (currently you can only attach photos if you are logged in
+using your Flickr account).}
+
+\p{Once you are done adding regions in the map that you have visited, you can share
+your trip journal with your friends and family by clicking on the \em{Share} button
+under the map, and cut and pasting them URLs provided into your Facebook, Twitter 
+or blog.  Currently there is not way to automatically post to any of these social
+networks.}
+
+\p{Note that you need to be logged in to permanently store your visited places or 
+attach Flickr photos and YouTube videos.  You can login using either your Facebook,
+Twitter or Flickr account.  These credentials are used to authenticate you and store 
+your settings without requiring you to create an account on the Project Nebraska
+website.  For the most part it does not matter which service you use to login with,
+except that for the moment at least you can only attach photos to your map if you
+are logged in using your Flickr account.  This may change in the future.}
+
 \cut{about privacy, contact information and terms of service}{
 
 \<a name="browser_compatibility">{}
@@ -102,6 +132,9 @@ personally identifying information.}
   \li{For Twitter we store your Twitter username, which is usually not your real name.}
   \li{For Facebook we store your Facebook UID, which is an integer assigned to you by
       Facebook.}
+  \li{For Flickr we store your Flickr username, which is not usually your real name.  
+      The Flickr API provides us with a \em{fullname} field, but we do not examine or 
+      store it.}
 }
 
 \p{The Project Nebraska Team will store posts and settings you make on the website 

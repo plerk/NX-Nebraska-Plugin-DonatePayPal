@@ -35,7 +35,7 @@ __PACKAGE__->table("integer_statistic");
 =head2 units
 
   data_type: 'varchar'
-  is_nullable: 1
+  is_nullable: 0
   size: 10
 
 =head2 is_primary
@@ -52,7 +52,7 @@ __PACKAGE__->add_columns(
   "name",
   { data_type => "varchar", is_nullable => 0, size => 128 },
   "units",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 0, size => 10 },
   "is_primary",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
@@ -76,8 +76,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2010-09-10 15:12:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z65u+hOiRS6wqrshQoOnVA
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2010-09-24 11:01:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F+mAiBZEkq+bZsLEQDjatQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

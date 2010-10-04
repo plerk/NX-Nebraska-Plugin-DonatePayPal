@@ -67,9 +67,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 trip_place_maps
 
-# Created by DBIx::Class::Schema::Loader v0.07000 @ 2010-08-18 10:18:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:t6+GpBf/0M7JQqLLwjmOLQ
+Type: has_many
+
+Related object: L<NX::Nebraska::Schema::Result::TripPlaceMap>
+
+=cut
+
+__PACKAGE__->has_many(
+  "trip_place_maps",
+  "NX::Nebraska::Schema::Result::TripPlaceMap",
+  { "foreign.map_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07000 @ 2010-09-24 11:01:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A2IWrs5fBzuukGP5yUNFZw
 
 sub statistics
 {

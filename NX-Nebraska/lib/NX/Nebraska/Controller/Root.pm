@@ -43,7 +43,28 @@ sub index :Path :Args(0)
 {
   my $self = shift;
   my $c = shift;
-  $c->response->redirect('/app/compare');
+  
+  my $apps = $c->apps;
+  $c->response->redirect($apps->[int rand int @$apps]->[0]);
+}
+
+sub app :Chained('/') :PathPart('app') :Args(0)
+{
+  my $self = shift;
+  my $c = shift;
+  
+  my($news_item) = $c->get_news(limit => 1);
+  
+  my($cache_data, $maps) = $c->app_extras({
+    short_app_name => 'index',
+  });
+  
+  $c->stash(
+    news_item => $news_item,
+    @$cache_data,
+    template => 'app/index.tt2',
+    icon_url => '/app',
+  );
 }
 
 sub login :Chained('/') :PathPart('login') :Args(0)
@@ -69,6 +90,7 @@ sub login :Chained('/') :PathPart('login') :Args(0)
   my $facebook = $c->request->param('facebook');
   my $twitter  = $c->request->param('twitter');
   my $return   = $c->request->param('return');
+  my $flickr   = $c->request->param('flickr');
   $return = $c->request->referer unless defined $return && $return;
   
   if(defined $twitter && $twitter)
@@ -80,21 +102,15 @@ sub login :Chained('/') :PathPart('login') :Args(0)
   
   elsif(defined $facebook && $facebook)
   {
-    ## This doesn't work.  So don't try and use it.
-    #if ($c->authenticate(undef,'facebook')) 
-    #{
-    #  warn "auth redirect => $return\n";
-    #  $c->response->redirect($return);
-    #  return;
-    #}
-    #else
-    #{
-    #  warn "auth fail Unable to authenticate against facebook\n";
-    #  $c->stash(
-    #    error_msg => 'Unable to authenticate against facebook',
-    #  );
-    #}
     $c->response->redirect('/api/facebook?internal=1');
+  }
+  
+  elsif(defined $flickr && $flickr)
+  {
+    my $realm = $c->get_auth_realm('flickr');
+    my $url = $realm->credential->authenticate_flickr_url($c);
+    $c->response->redirect($url);
+    warn "url = $url\n";
   }
   
   elsif(defined $username && defined $password && $username ne '' && $password ne '')
@@ -126,8 +142,113 @@ sub logout :Chained('/') :PathPart('logout') :Args(0)
   my $self = shift;
   my $c = shift;
   $c->logout;
-  $c->response->redirect($c->request->referer);
+  $c->response->redirect($c->request->referer // '/');
 }
+
+sub apt_flickr :Chained('/') :PathPart('api/flickr') :Args(0)
+{
+  my $self = shift;
+  my $c = shift;
+  my $return = '/';
+  
+  if($c->authenticate(undef, 'flickr'))
+  {
+    $c->response->redirect($return);
+  }
+  else
+  {
+    $c->response->redirect('/login?&error_msg=Unable+to+authenticate+against+flickr');
+  }
+}
+
+sub api_flickr_recent :Chained('/') :PathPart('api/flickr/recent') :Args(0)
+{
+  my $self = shift;
+  my $c = shift;
+  
+  my $flickr = $c->flickr;
+  my $flickr_user = $c->flickr_user;
+  my $data = [];
+  
+  if(defined $flickr && defined $flickr_user)
+  {
+    my $cache_key = join(':', 'flickr', 'people.getPublicPhotos', $flickr_user->flickr_username);
+    my $cache_data = $c->memd->get($cache_key);
+    if(defined $cache_data)
+    {
+      $data = $cache_data;
+    }
+    else
+    {
+      my $response = eval { 
+        $flickr->execute_method('flickr.people.getPublicPhotos', {
+          user_id => $flickr_user->flickr_nsid,
+          safe_search => 1,
+          per_page    => $c->config->{Flickr}->{max},
+          extras => join(',', qw(
+            license
+            icon_server
+            o_dims
+            views
+            media
+            path_alias
+            url_sq
+            url_t
+            url_s
+            url_m
+            url_o
+          )),
+
+        });
+      };
+      if(my $error = $@)
+      {
+        #warn "CONTENT=====\n", $error->api->decoded_content, "\nSTATUS LINE\n", $error->api->status_line, "\nEND\n";
+        warn $error;
+      }
+      else
+      {
+        while(my($id, $photo) = each %{ $response->hash->{photos}->{photo} })
+        {
+          push @$data, {
+            id => $id,
+            url => join('/', 'http://www.flickr.com/photos', $flickr_user->flickr_username, $id),
+            title => $photo->{title},
+            m => {
+              url => $photo->{url_m},
+              height => $photo->{height_m},
+              width => $photo->{width_m},
+            },
+            s => {
+              url => $photo->{url_s},
+              height => $photo->{height_s},
+              width => $photo->{width_s},
+            },
+            sq => {
+              url => $photo->{url_sq},
+              height => $photo->{height_sq},
+              width => $photo->{width_sq},
+            },
+            t => {
+              url => $photo->{url_t},
+              height => $photo->{height_t},
+              width => $photo->{width_t},
+            },
+          };
+        }
+        $c->memd->set($cache_key => $data, 10*60);
+      }
+    }
+  }
+  
+  @$data = sort { $b->{id} <=> $a->{id} } @$data;
+  
+  $c->stash(
+    current_view => 'JSON',
+    json_data => $data,
+  );
+}
+
 
 sub api_twitter :Chained('/') :PathPart('api/twitter') :Args(0)
 {
@@ -187,16 +308,10 @@ sub begin :Private
   my $self = shift;
   my $c = shift;
   
-  my $ad = $c->ad;
-  my $donate = $c->donate;
-  my $nav = $c->nav; 
- 
   $c->stash(
     js => [],
-    navs => $nav,
-    ad => $ad,
-    donate => $donate,
     icon_name => 'icon',
+    icon_url => '/',
     error_msg => $c->request->param('error_msg') // '',
     warning_msg => $c->request->param('warning_msg') // '',
   );

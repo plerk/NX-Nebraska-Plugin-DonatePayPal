@@ -45,6 +45,7 @@ unless($ret)
 
 my %c = (
   'NX::Nebraska::Controller::Compare' => 'compare',
+  'NX::Nebraska::Controller::Trip' => 'trip',
 );
 
 my $license = '';

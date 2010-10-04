@@ -9,6 +9,7 @@
 
 if(NX === undefined) var NX = {};
 if(NX.Nebraska === undefined) NX.Nebraska = {};
+if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
 
 (function ()
 {
@@ -19,7 +20,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
   
   var maps = {};
   
-  NX.Nebraska.CompareMap = function(aName, aBase)
+  NX.Nebraska.Compare.Map = function(aName, aBase)
   {
     var self = this;
     this.name = aName;
@@ -81,19 +82,19 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     maps[this.name] = this;
   }
   
-  NX.Nebraska.CompareMap.prototype.statesAreSelectable = function()
+  NX.Nebraska.Compare.Map.prototype.statesAreSelectable = function()
   {
     return this.statesAreSelectableFlag;
   }
   
-  NX.Nebraska.CompareMap.prototype.disableStateSelection = function()
+  NX.Nebraska.Compare.Map.prototype.disableStateSelection = function()
   {
     this.statesAreSelectableFlag = false;
     this.stateSelector.style.display = 'none';
     this.list.style.display = 'block';
   }
   
-  NX.Nebraska.CompareMap.prototype.assoicateMaps = function(aOther)
+  NX.Nebraska.Compare.Map.prototype.assoicateMaps = function(aOther)
   {
     if(aOther != null)
     {
@@ -102,21 +103,21 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     }
   }
   
-  NX.Nebraska.CompareMap.prototype.enableControls = function()
+  NX.Nebraska.Compare.Map.prototype.enableControls = function()
   {
     this.mainSelector.disabled = false;
     this.stateSelector.disabled = false;
     this.statsSelector.disabled = false;
   }
   
-  NX.Nebraska.CompareMap.prototype.disableControls = function()
+  NX.Nebraska.Compare.Map.prototype.disableControls = function()
   {
     this.mainSelector.disabled = true;
     this.stateSelector.disabled = true;
     this.statsSelector.disabled = true;
   }
   
-  NX.Nebraska.CompareMap.prototype.changeBaseMapCB = function(aSelect)
+  NX.Nebraska.Compare.Map.prototype.changeBaseMapCB = function(aSelect)
   {
     var self = this;
     var newCode = aSelect.options[aSelect.selectedIndex].value;
@@ -149,7 +150,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
         output_map_code = newCode;
         input_map_code = this.otherMap.map.getCode();
       }
-      window.location = '/compare?input_map_code=' + input_map_code + '&output_map_code=' + output_map_code;
+      window.location = '/app/compare?input_map_code=' + input_map_code + '&output_map_code=' + output_map_code;
     }
     else
     {
@@ -169,7 +170,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     }
   }
   
-  NX.Nebraska.CompareMap.prototype.changeStateCB = function(aSelect)
+  NX.Nebraska.Compare.Map.prototype.changeStateCB = function(aSelect)
   {
     var len = aSelect.options.length;
     for(var i=0; i<len; i++)
@@ -185,7 +186,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
   }
   
   
-  NX.Nebraska.CompareMap.prototype.changeStatsCB = function(aSelect)
+  NX.Nebraska.Compare.Map.prototype.changeStatsCB = function(aSelect)
   {
     /*
      * if unselected
@@ -213,13 +214,13 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     }
   }
   
-  NX.Nebraska.CompareMap.prototype.updatePostSelect = function(aAlgoResult)
+  NX.Nebraska.Compare.Map.prototype.updatePostSelect = function(aAlgoResult)
   {
     this.updateWeightDisplay(aAlgoResult);
     this.updateList();
   }
   
-  NX.Nebraska.CompareMap.prototype.updateWeightDisplay = function(aAlgoResult)
+  NX.Nebraska.Compare.Map.prototype.updateWeightDisplay = function(aAlgoResult)
   {
     if(this.selectedStat == null)
     {
@@ -257,7 +258,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     }
   }
   
-  NX.Nebraska.CompareMap.prototype.updateList = function()
+  NX.Nebraska.Compare.Map.prototype.updateList = function()
   {
     this.list.innerHTML = '';
     var i;
@@ -286,12 +287,12 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     this.listPopup.setHTML('<b>regions selected</b>: ' + count + '<br/>' + nameList.join(', '));
   }
   
-  NX.Nebraska.CompareMap.prototype.updatePlacesCB = function(aRaw)
+  NX.Nebraska.Compare.Map.prototype.updatePlacesCB = function(aRaw)
   {
     this.stateSelector.innerHTML = '';
     this.list.innerHTML = '';
     this.placeById = {};
-    var payload = eval(aRaw);
+    var payload = JSON.parse(aRaw);
     var len = payload.length;
     for(var i=0; i<len; i++)
     {
@@ -310,17 +311,17 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
       option.value = payload[i].id;
       option.readonly = true;
       this.stateSelector.appendChild(option);
-      this.placeById[payload[i].id] = new NX.Nebraska.Place(this, payload[i].id, payload[i].name, payload[i].code, payload[i].flag, option);
+      this.placeById[payload[i].id] = new NX.Nebraska.Compare.Place(this, payload[i].id, payload[i].name, payload[i].code, payload[i].flag, option);
     }
     this.stateSelector.disabled = false;
   }
   
-  NX.Nebraska.CompareMap.prototype.updateStatsCB = function(aRaw)
+  NX.Nebraska.Compare.Map.prototype.updateStatsCB = function(aRaw)
   {
     this.statsSelector.innerHTML = '';
     this.statById = {};
     this.selectedStat = null;
-    var payload = eval(aRaw);
+    var payload = JSON.parse(aRaw);
     var len = payload.length;
     var option;
     for(var i=0; i<len; i++)
@@ -338,17 +339,17 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
       option.innerHTML = payload[i].name + ' ' + payload[i].year;
       option.value = payload[i].id;
       this.statsSelector.appendChild(option);
-      this.statById[payload[i].id] = new NX.Nebraska.Stat(payload[i].id, payload[i].name, parseInt(payload[i].year), payload[i].units, payload[i].is_primary);
+      this.statById[payload[i].id] = new NX.Nebraska.Compare.Stat(payload[i].id, payload[i].name, parseInt(payload[i].year), payload[i].units, payload[i].is_primary);
     }
     this.statsSelector.disabled = false;
   }
   
-  NX.Nebraska.CompareMap.prototype.getAjaxURL = function(aFunction)
+  NX.Nebraska.Compare.Map.prototype.getAjaxURL = function(aFunction)
   {
     return '/map/id/' + this.map.getCode() + '/' + aFunction;
   }
   
-  NX.Nebraska.CompareMap.prototype.update = function(aWhenDoneCallback)
+  NX.Nebraska.Compare.Map.prototype.update = function(aWhenDoneCallback)
   {
     var done_count = 0;
     var self = this;
@@ -379,7 +380,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     );
   }
   
-  NX.Nebraska.CompareMap.prototype.iteratePlaces = function(aFunction)
+  NX.Nebraska.Compare.Map.prototype.iteratePlaces = function(aFunction)
   {
     for(var id in this.placeById)
     {
@@ -387,17 +388,17 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     }
   }
   
-  NX.Nebraska.CompareMap.prototype.clearAll = function()
+  NX.Nebraska.Compare.Map.prototype.clearAll = function()
   {
     this.iteratePlaces(function(aPlace) { aPlace.selectOff(); aPlace.option.selected = false; });
     this.updatePostSelect();
   }
   
-  NX.Nebraska.CompareMap.prototype.updateValuesCB = function(aRaw)
+  NX.Nebraska.Compare.Map.prototype.updateValuesCB = function(aRaw)
   {
     this.iteratePlaces(function(aPlace) { aPlace.clearStatAndValue(); });
     
-    var payload = eval(aRaw);
+    var payload = JSON.parse(aRaw);
     var len = payload.length;
     for(var i=0; i<len; i++)
     {
@@ -410,7 +411,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     }
   }
   
-  NX.Nebraska.CompareMap.prototype.updateValues = function(aWhenDoneCallback)
+  NX.Nebraska.Compare.Map.prototype.updateValues = function(aWhenDoneCallback)
   {
     var self = this;
     if(this.selectedStat == null)
@@ -427,7 +428,7 @@ if(NX.Nebraska === undefined) NX.Nebraska = {};
     );
   }
   
-  NX.Nebraska.CompareMap.prototype.getWeight = function()
+  NX.Nebraska.Compare.Map.prototype.getWeight = function()
   {
     var weight = 0;
     this.iteratePlaces(function(aPlace){

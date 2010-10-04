@@ -10,6 +10,7 @@
 if(NX === undefined) var NX = {};
 if(NX.Nebraska === undefined) NX.Nebraska = {};
 if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
+if(NX.Nebraska.Compare.Main === undefined) NX.Nebraska.Compare.Main = {};
 
 (function ()
 {
@@ -20,12 +21,12 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
   
   NX.Nebraska.Util.callOnLoad(function(){
   
-    var inputMap = new NX.Nebraska.CompareMap('input', document.getElementById('map_default_input').value);
-    var outputMap = new NX.Nebraska.CompareMap('output', document.getElementById('map_default_output').value);
-    var algoList = new NX.Nebraska.AlgoList();
-    algoList.add(new NX.Nebraska.Algo.SmallestFirst);
-    algoList.add(new NX.Nebraska.Algo.LargestFirst);
-    algoList.add(new NX.Nebraska.Algo.Optimal);
+    var inputMap = new NX.Nebraska.Compare.Map('input', document.getElementById('map_default_input').value);
+    var outputMap = new NX.Nebraska.Compare.Map('output', document.getElementById('map_default_output').value);
+    var algoList = new NX.Nebraska.Compare.AlgoList();
+    algoList.add(new NX.Nebraska.Compare.Algo.SmallestFirst);
+    algoList.add(new NX.Nebraska.Compare.Algo.LargestFirst);
+    algoList.add(new NX.Nebraska.Compare.Algo.Optimal);
     
     inputMap.assoicateMaps(outputMap);
     inputMap.placeConfigChangeCB = function() { algoList.findBestFit(inputMap, outputMap); return false; };
@@ -159,7 +160,7 @@ if(NX.Nebraska.Compare === undefined) NX.Nebraska.Compare = {};
       if(NX.Nebraska.Util.isKHTML()
       || NX.Nebraska.Util.isSvgweb())
       {
-        window.location = '/compare?input_map_code=' + outputMap.map.getCode() + '&output_map_code=' + inputMap.map.getCode();
+        window.location = '/app/compare?input_map_code=' + outputMap.map.getCode() + '&output_map_code=' + inputMap.map.getCode();
       }
       else
       {

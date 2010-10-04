@@ -51,4 +51,14 @@ sub set
   return 1;
 }
 
+sub delete
+{
+  # This hasn't tested and might not work since
+  # we're trying to call delete from delete. 
+  # Hrm.
+  my $self = shift;
+  my $key = shift;
+  delete $self->{$key};
+}
+
 1;
