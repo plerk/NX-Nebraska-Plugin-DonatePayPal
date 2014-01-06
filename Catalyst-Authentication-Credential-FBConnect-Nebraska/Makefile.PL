@@ -18,5 +18,5 @@ build_requires 'Test::WWW::Mechanize::Catalyst';
 build_requires 'Test::More';
 build_requires 'ok';
 
-auto_install;
+auto_install();
 WriteAll();

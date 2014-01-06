@@ -394,7 +394,7 @@ sub nav
         [ '/doc/about#tos'                   => 'Terms of Service'      ], ], ],
     [ '/news'         => 'News', $news_menu                             ],
     [ '/doc/download' => 'Download',
-      [ [ 'http://nebraska.wdlabs.com/svn'   => 'Subversion'            ], ], ],
+      [ [ 'https://github.com/plicease/NX-Nebraska' => 'GitHub'         ], ], ],
   ];
   
   push @$menu, $_ for @_;

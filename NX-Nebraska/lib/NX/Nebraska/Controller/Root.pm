@@ -45,7 +45,8 @@ sub index :Path :Args(0)
   my $c = shift;
   
   my $apps = $c->apps;
-  $c->response->redirect($apps->[int rand int @$apps]->[0]);
+  #$c->response->redirect($apps->[int rand int @$apps]->[0]);
+  $c->response->redirect('/app/compare');
 }
 
 sub app :Chained('/') :PathPart('app') :Args(0)
