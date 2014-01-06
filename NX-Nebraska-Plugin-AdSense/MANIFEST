@@ -17,10 +17,4 @@ LICENSE
 Makefile.PL
 MANIFEST
 META.yml
-NX-Nebraska-Plugin-AdSense-0.01/debian/changelog
-NX-Nebraska-Plugin-AdSense-0.01/debian/compat
-NX-Nebraska-Plugin-AdSense-0.01/debian/control
-NX-Nebraska-Plugin-AdSense-0.01/debian/copyright
-NX-Nebraska-Plugin-AdSense-0.01/debian/rules
-NX-Nebraska-Plugin-AdSense-0.01/debian/watch
 t/load.t
