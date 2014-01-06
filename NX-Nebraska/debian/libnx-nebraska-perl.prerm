@@ -1,3 +1,0 @@
-#!/bin/sh
-
-rm -f /var/lib/nebraska/data.sqlite

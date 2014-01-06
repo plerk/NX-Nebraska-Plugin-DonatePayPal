@@ -1,6 +1,0 @@
-root /var/lib/nebraska
-sql /var/lib/nebraska
-ziyal /var/lib/nebraska
-tmpl /var/lib/nebraska
-debian/nebraska.yml /etc
-LICENSE /var/lib/nebraska

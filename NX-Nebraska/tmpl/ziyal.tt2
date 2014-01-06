@@ -1,4 +1,0 @@
-<div class="ziyal_content">
-  [% html %]
-  [% IF c.ad %]<center>[% c.ad.ad_wide %]</center>[% END %]
-</div>

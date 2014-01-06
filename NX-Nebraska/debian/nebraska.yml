@@ -1,9 +1,0 @@
----
-
-name: NX::Nebraska
-
-Model::DB:
-  connect_info:
-    dsn: 'dbi:SQLite:dbname=/var/lib/nebraska/data.sqlite'
-    user: ''
-    password: ''
